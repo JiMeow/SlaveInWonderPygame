@@ -60,7 +60,6 @@ def threaded_client(conn, id):
     currentPlayer[id] = 0
     conn.close()
 
-
 def main():
     for i in range(1, maxPlayers+1):
         currentPlayer[i] = 0

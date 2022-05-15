@@ -174,6 +174,22 @@ class Main():
                         pygame.quit()
                         self.network.disconnect()
                         break
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if event.pos[0] >= 492 and event.pos[0] <= 492+40*len(self.player.card) and event.pos[1] >= 744 and event.pos[1] <= 804:
+                            newactive = int((event.pos[0]-492)//40)
+                            val = 0
+                            nowactive = []
+                            for card in self.player.card:
+                                if card.active == 1:
+                                    nowactive.append(card)
+                                    val = card.val
+                            if self.player.card[newactive].val != val:
+                                for card in nowactive:
+                                    card.click()
+                                self.player.card[newactive].click()
+                            else:
+                                self.player.card[newactive].click()
 
             if not self.thread.is_alive():
                 # set data from server

@@ -19,11 +19,18 @@ class Card():
             self.val = 15
         else:
             self.val = int(self.val)
+        self.active = False
 
     def draw(self, screen, x, y):
         img = pygame.transform.scale(
             pygame.image.load(f"photo/cardsprite/{self.name}"), (40, 60))
-        screen.blit(img, (x, y))
+        if self.active:
+            screen.blit(img, (x, y-20))
+        else:
+            screen.blit(img, (x, y))
+
+    def click(self):
+        self.active = not self.active
 
     def __lt__(self, obj):
         if self.val < obj.val:
