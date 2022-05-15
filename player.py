@@ -9,6 +9,7 @@ class Player:
         self.room = "0"
         self.width = 20
         self.high = 20
+        self.card = []
 
     def draw(self, screen, x, y):
         pygame.draw.rect(screen, self.color, (x, y, self.width, self.high))

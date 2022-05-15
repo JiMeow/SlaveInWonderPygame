@@ -22,6 +22,8 @@ maxPlayers = 50
 playerdata = {}
 roomstate = {}
 
+seed = {}
+
 
 def threaded_client(conn, id):
     print(id, "connected")
@@ -35,6 +37,7 @@ def threaded_client(conn, id):
             data = pickle.loads(conn.recv(65536))
             playerdata[id] = data["player"]
             if playerdata[id].room not in roomstate:
+                seed[playerdata[id].room] = random.randint(0, 100000)
                 roomstate[playerdata[id].room] = False
             roomstate[playerdata[id].room] = max(
                 roomstate[playerdata[id].room], data["gamestart"])
@@ -44,7 +47,8 @@ def threaded_client(conn, id):
             else:
                 reply = {
                     "allplayer": playerdata,
-                    "gamestart": roomstate[playerdata[id].room]
+                    "gamestart": roomstate[playerdata[id].room],
+                    "seed": seed[playerdata[id].room]
                 }
             conn.sendall(pickle.dumps(reply))
         except Exception as e:
