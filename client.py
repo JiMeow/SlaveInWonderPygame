@@ -13,44 +13,67 @@ from helper import *
 
 
 class Main():
+
     def __init__(self):
+
+        # accept player name and room id from user
         name = input("Enter your name: ")
         room = input("Enter room id: ")
+        # init network
         self.network = Network()
+        # init pygame
         self.win = pygame.display.set_mode((1536, 864))
         pygame.display.set_caption("SlaveWonderPygame")
         pygame.init()
         self.clock = pygame.time.Clock()
+
+        # init ourself (player)
         self.player = self.network.getInitData()
         self.player.name = name
         self.player.room = room
-        self.allplayer = self.network.send(self.player)["allplayer"]
 
+        # init all player and gamestatus
+        tempdata = self.network.send({
+            "player": self.player,
+            "gamestart": 0
+        })
+        self.allplayer = tempdata["allplayer"]
+        self.gamestart = tempdata["gamestart"]
+
+        # init data for accept data from server
         self.tempdata = {
-            "allplayer": dict(self.allplayer)
+            "allplayer": dict(self.allplayer),
+            "gamestart": 0
         }
+
+        # init layout
         self.layout = Layout(self.win)
 
+        # init thread
         self.thread = Thread(target=getDataFromServer, args=(
             self.network, self.player, self.tempdata))
 
-        # gui in game
+        # gui in lobby
         self.playbutton = Button(self.win, (718, 382, 100, 100))
 
     def play(self):
         self.run = True
         while self.run:
+            # set bg as black
             self.win.fill((0, 0, 0))
+            # set FPS to 60
             self.clock.tick(60)
-            self.playbutton.draw()
             if not self.thread.is_alive():
+                # set data from server
                 setDataFromServer(self.tempdata, self.allplayer)
+                self.gamestart = max(
+                    self.gamestart, self.tempdata["gamestart"])
+                # start thread
                 self.thread = Thread(target=getDataFromServer, args=(
-                    self.network, self.player, self.tempdata))
+                    self.network, self.player, self.gamestart, self.tempdata))
                 self.thread.start()
-                numberOfPlayerinroom = countPlayerinRoom(
-                    self.allplayer, self.player.room)
 
+            # handle all events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
@@ -63,19 +86,27 @@ class Main():
                         pygame.quit()
                         self.network.disconnect()
                         break
-                self.playbutton.get_event(event, numberOfPlayerinroom)
+                # check if click play button
+                self.playbutton.get_event(event)
 
             if not self.thread.is_alive():
+                # set data from server
                 setDataFromServer(self.tempdata, self.allplayer)
+                self.gamestart = max(
+                    self.gamestart, self.tempdata["gamestart"])
+                # start thread
                 self.thread = Thread(target=getDataFromServer, args=(
-                    self.network, self.player, self.tempdata))
+                    self.network, self.player, self.gamestart, self.tempdata))
                 self.thread.start()
-                numberOfPlayerinroom = countPlayerinRoom(
-                    self.allplayer, self.player.room)
 
+            # draw all component
             self.layout.updateAllplayer(self.allplayer)
             self.layout.updatePlayer(self.player)
+            self.layout.updateButton(self.playbutton)
             self.layout.draw()
+            # update game status
+            self.gamestart = max(self.gamestart, self.layout.gamestart)
+            print(self.gamestart)
             pygame.display.update()
 
         pygame.quit()

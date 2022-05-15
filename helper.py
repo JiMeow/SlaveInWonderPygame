@@ -9,10 +9,14 @@ def setDictdata(dict, data):
         dict[key] = data[key]
 
 
-def getDataFromServer(network, player, data):
-    newdata = network.send(player)
+def getDataFromServer(network, player, gamestart, data):
+    newdata = network.send({
+        "player": player,
+        "gamestart": gamestart,
+    })
     resetDictdata(data)
     data["allplayer"] = newdata["allplayer"]
+    data["gamestart"] = newdata["gamestart"]
 
 
 def setDataFromServer(data, allplayer):

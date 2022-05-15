@@ -6,14 +6,17 @@ class Button():
     def __init__(self, win, rect):
         self.win = win
         self.rect = pygame.Rect(rect)
+        self.ispress = False
 
-    def get_event(self, event, nop):
+    def get_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self.on_click(event, nop)
+            self.on_click(event)
 
-    def on_click(self, event, nop):
-        if self.rect.collidepoint(event.pos) and nop == 4:
-            print("Play game")
+    def on_click(self, event):
+        if self.rect.collidepoint(event.pos):
+            self.ispress = True
+        else:
+            self.ispress = False
 
     def draw(self):
         pygame.draw.rect(self.win, (255, 255, 255), self.rect)

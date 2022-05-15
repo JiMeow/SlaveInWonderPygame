@@ -20,6 +20,7 @@ currentPlayer = {}
 maxPlayers = 50
 
 playerdata = {}
+roomstate = {}
 
 
 def threaded_client(conn, id):
@@ -32,13 +33,18 @@ def threaded_client(conn, id):
     while True:
         try:
             data = pickle.loads(conn.recv(65536))
-            playerdata[id] = data
+            playerdata[id] = data["player"]
+            if playerdata[id].room not in roomstate:
+                roomstate[playerdata[id].room] = False
+            roomstate[playerdata[id].room] = max(
+                roomstate[playerdata[id].room], data["gamestart"])
             if not data:
                 print("Disconnected")
                 break
             else:
                 reply = {
-                    "allplayer": playerdata
+                    "allplayer": playerdata,
+                    "gamestart": roomstate[playerdata[id].room]
                 }
             conn.sendall(pickle.dumps(reply))
         except Exception as e:
