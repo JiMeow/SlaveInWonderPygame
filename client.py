@@ -9,6 +9,8 @@ from layout import Layout
 
 from helper import *
 
+# 1536 * 864 -> 768 * 432
+
 
 class Main():
     def __init__(self):
@@ -32,6 +34,9 @@ class Main():
         self.thread = Thread(target=getDataFromServer, args=(
             self.network, self.player, self.tempdata))
 
+        # gui in game
+        self.playbutton = Button(self.win, (718, 382, 100, 100))
+
     def play(self):
         self.run = True
         self.win.fill((0, 0, 0))
@@ -43,6 +48,8 @@ class Main():
                 self.thread = Thread(target=getDataFromServer, args=(
                     self.network, self.player, self.tempdata))
                 self.thread.start()
+                numberOfPlayerinroom = countPlayerinRoom(
+                    self.allplayer, self.player.room)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -56,14 +63,15 @@ class Main():
                         pygame.quit()
                         self.network.disconnect()
                         break
+                self.playbutton.get_event(event, numberOfPlayerinroom)
 
             if not self.thread.is_alive():
                 setDataFromServer(self.tempdata, self.allplayer)
                 self.thread = Thread(target=getDataFromServer, args=(
                     self.network, self.player, self.tempdata))
                 self.thread.start()
-
-            playbutton = Button(self.win, (10, 10, 100, 100))
+                numberOfPlayerinroom = countPlayerinRoom(
+                    self.allplayer, self.player.room)
 
             self.layout.updateAllplayer(self.allplayer)
             self.layout.updatePlayer(self.player)
