@@ -36,5 +36,5 @@ class Layout:
 
         textroom = pygame.font.Font(None, int(30)).render(
             f"room id: {myroom}", True, "white")
-        self.win.blit(textroom, (100, 100))
+        self.win.blit(textroom, (10, 10))
         pygame.display.update()
