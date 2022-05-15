@@ -8,7 +8,6 @@ class Button():
         self.rect = pygame.Rect(rect)
 
     def get_event(self, event, nop):
-        self.draw()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.on_click(event, nop)
 

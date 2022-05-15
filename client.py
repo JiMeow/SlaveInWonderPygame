@@ -39,10 +39,10 @@ class Main():
 
     def play(self):
         self.run = True
-        self.win.fill((0, 0, 0))
         while self.run:
+            self.win.fill((0, 0, 0))
             self.clock.tick(60)
-
+            self.playbutton.draw()
             if not self.thread.is_alive():
                 setDataFromServer(self.tempdata, self.allplayer)
                 self.thread = Thread(target=getDataFromServer, args=(
