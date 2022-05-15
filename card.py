@@ -5,6 +5,7 @@ class Card():
     def __init__(self, name):
         self.name = name
         self.flowers, self.val = name[:-4].split("-")
+        # set card values
         if self.val == 'T':
             self.val = 10
         elif self.val == 'J':
@@ -24,14 +25,18 @@ class Card():
     def draw(self, screen, x, y):
         img = pygame.transform.scale(
             pygame.image.load(f"photo/cardsprite/{self.name}"), (40, 60))
+        # draw card if card active
         if self.active:
             screen.blit(img, (x, y-20))
+        # draw card if card not active
         else:
             screen.blit(img, (x, y))
 
     def click(self):
+        # if card is active, set card not active else set card active
         self.active = not self.active
 
+    # set for sort
     def __lt__(self, obj):
         if self.val < obj.val:
             return True

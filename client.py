@@ -174,16 +174,20 @@ class Main():
                         pygame.quit()
                         self.network.disconnect()
                         break
+                # handle click on card
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        # get mouse position if click on card
                         if event.pos[0] >= 492 and event.pos[0] <= 492+40*len(self.player.card) and event.pos[1] >= 744 and event.pos[1] <= 804:
-                            newactive = int((event.pos[0]-492)//40)
-                            val = 0
+                            # get new card index
+                            newactive, val = int((event.pos[0]-492)//40), 0
                             nowactive = []
+                            # get now active card index and it values
                             for card in self.player.card:
                                 if card.active == 1:
                                     nowactive.append(card)
                                     val = card.val
+                            # check if click on not same value of activae card cancle active all card else continue
                             if self.player.card[newactive].val != val:
                                 for card in nowactive:
                                     card.click()
