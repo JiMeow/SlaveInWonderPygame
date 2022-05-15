@@ -5,6 +5,7 @@ import time
 import pickle
 import pygame
 import hashlib
+import random
 from player import Player
 
 server = "25.34.159.172"
@@ -23,8 +24,9 @@ playerdata = {}
 
 def threaded_client(conn, id):
     print(id, "connected")
-    # playerdata[id] = Player(id, (50*id % 255, 50*id % 255, 50*id % 255))
-    playerdata[id] = Player(id, (255, 255, 255))
+    playerdata[id] = Player(
+        id, (random.randint(0, 100) + 50*id % 155, random.randint(0, 100) + 50*id % 155, random.randint(0, 100) + 50*id % 155))
+    # playerdata[id] = Player(id, (255, 255, 255))
     conn.send(pickle.dumps(playerdata[id]))
     reply = ""
     while True:
@@ -44,6 +46,7 @@ def threaded_client(conn, id):
             break
 
     print(id, "disconnected")
+    playerdata.pop(id)
     currentPlayer[id] = 0
     conn.close()
 

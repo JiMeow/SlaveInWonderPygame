@@ -16,14 +16,12 @@ class Layout:
         myroom = self.player.room
         allplayer = list(self.allplayer.items())
         allplayer.sort()
-        print(allplayer)
         playertodraw = []
         for id, player in allplayer:
             if player.room == myroom:
                 playertodraw.append(player)
         while playertodraw[0].id != self.player.id:
             playertodraw.append(playertodraw.pop(0))
-        print("playertodraw", playertodraw)
         index = 0
         for player in playertodraw:
             if index == 0:
@@ -35,4 +33,8 @@ class Layout:
             if index == 3:
                 player.draw(self.win, 1426, 412)
             index += 1
+
+        textroom = pygame.font.Font(None, int(30)).render(
+            f"room id: {myroom}", True, "white")
+        self.win.blit(textroom, (100, 100))
         pygame.display.update()
