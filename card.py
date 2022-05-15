@@ -3,6 +3,7 @@ import pygame
 
 class Card():
     def __init__(self, name):
+        self.name = name
         self.flowers, self.val = name[:-4].split("-")
         if self.val == 'T':
             self.val = 10
@@ -18,11 +19,11 @@ class Card():
             self.val = 15
         else:
             self.val = int(self.val)
-        self.img = pygame.transform.scale(
-            pygame.image.load(f"photo/cardsprite/{name}"), (40, 60))
 
     def draw(self, screen, x, y):
-        screen.blit(self.img, (x, y))
+        img = pygame.transform.scale(
+            pygame.image.load(f"photo/cardsprite/{self.name}"), (40, 60))
+        screen.blit(img, (x, y))
 
     def __lt__(self, obj):
         if self.val < obj.val:

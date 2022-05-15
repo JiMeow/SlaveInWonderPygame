@@ -53,12 +53,8 @@ class Layout:
         for player in playertodraw:
             if index == 0:
                 player.draw(self.win, 758, 744)
-                cardtodraw = []
                 for i in range(len(player.card)):
-                    cardtodraw.append(Layout.card[player.card[i]-1])
-                cardtodraw.sort()
-                for i in range(len(cardtodraw)):
-                    cardtodraw[i].draw(self.win, 758-260+i*40, 744)
+                    player.card[i].draw(self.win, 758-260+i*40, 744)
             if index == 1:
                 player.draw(self.win, 100, 412)
             if index == 2:

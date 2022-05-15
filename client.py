@@ -7,6 +7,7 @@ import time
 from button import Button
 from network import Network
 from layout import Layout
+from card import Card
 
 from helper import *
 
@@ -14,6 +15,16 @@ from helper import *
 
 
 class Main():
+    cardname = [
+        'club-1.png', 'club-2.png', 'club-3.png', 'club-4.png', 'club-5.png', 'club-6.png', 'club-7.png', 'club-8.png', 'club-9.png', 'club-T.png',  'club-J.png', 'club-Q.png', 'club-K.png',
+        'diamond-1.png', 'diamond-2.png', 'diamond-3.png', 'diamond-4.png', 'diamond-5.png', 'diamond-6.png', 'diamond-7.png', 'diamond-8.png', 'diamond-9.png', 'diamond-T.png', 'diamond-J.png', 'diamond-Q.png', 'diamond-K.png',
+        'heart-1.png', 'heart-2.png', 'heart-3.png', 'heart-4.png', 'heart-5.png', 'heart-6.png', 'heart-7.png', 'heart-8.png', 'heart-9.png', 'heart-T.png', 'heart-J.png', 'heart-Q.png', 'heart-K.png',
+        'spade-1.png', 'spade-2.png', 'spade-3.png', 'spade-4.png', 'spade-5.png', 'spade-6.png', 'spade-7.png', 'spade-8.png', 'spade-9.png', 'spade-T.png', 'spade-J.png', 'spade-Q.png', 'spade-K.png'
+    ]
+
+    card = []
+    for name in cardname:
+        card.append(Card(name))
 
     def __init__(self):
 
@@ -117,21 +128,25 @@ class Main():
         self.network.disconnect()
 
     def game(self):
+        # set seed
         random.seed(self.seed)
+
+        # set player in our room
         playerinroom = []
         for id in self.allplayer:
             if self.allplayer[id].room == self.player.room:
                 playerinroom.append(self.allplayer[id])
         playerinroom.sort(key=lambda x: x.id)
-        card = [i for i in range(1, 53)]
+
+        # set card and shuffle to others
+        card = [Main.card[i-1] for i in range(1, 53)]
         random.shuffle(card)
         for index in range(len(playerinroom)):
-            # playerinroom[index].card = sorted(
-            #     card[index*13:index*13+13], key=lambda x: ((x-1) % 13, (x-1)//13))
-            playerinroom[index].card = card[index*13:index*13+13]
+            playerinroom[index].card = sorted(card[index*13:index*13+13])
             if playerinroom[index].id == self.player.id:
                 self.player = playerinroom[index]
 
+        # game loop
         run = True
         while run:
             # set bg as black
