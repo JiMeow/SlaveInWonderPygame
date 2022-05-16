@@ -4,6 +4,13 @@ from card import Card
 
 
 def countPlayerinRoom(allplayer, room):
+    """
+    It counts the number of players in a room
+
+    :param allplayer: a dictionary of all players in the game
+    :param room: the room you want to count the players in
+    :return: The number of players in a room.
+    """
     ans = 0
     for id, player in allplayer.items():
         if player.room == room:
@@ -24,34 +31,18 @@ class Layout:
         card.append(Card(name))
 
     def __init__(self, win):
+        """
+        The function __init__ is a constructor that initializes the class
+
+        :param win: The window that the game is being played in
+        """
         self.win = win
         self.gamestart = 0
 
-    def updateAllplayer(self, allplayer):
-        self.allplayer = allplayer
-
-    def updatePlayer(self, player):
-        self.player = player
-
-    def updateplayButton(self, button):
-        self.playbutton = button
-
-    def updateplaceButton(self, placeButton):
-        self.placebutton = placeButton
-
-    def updatepassButton(self, passButton):
-        self.passbutton = passButton
-
-    def updateGamestatus(self, gamestart):
-        self.gamestart = gamestart
-
-    def updateTable(self, table):
-        self.table = table
-
-    def updateTurn(self, playertoplay):
-        self.playertoplay = playertoplay
-
     def drawgame(self):
+        """
+        It draws the game
+        """
         myroom = self.player.room
         allplayer = list(self.allplayer.items())
         allplayer.sort()
@@ -94,6 +85,9 @@ class Layout:
         pygame.display.update()
 
     def drawlobby(self):
+        """
+        It draws the lobby
+        """
         myroom = self.player.room
         allplayer = list(self.allplayer.items())
         allplayer.sort()
@@ -127,3 +121,70 @@ class Layout:
             self.playbutton.ispress = 0
 
         pygame.display.update()
+
+    def updateAllplayer(self, allplayer):
+        """
+        It takes a list of all players and updates the list of all players
+
+        :param allplayer: a list of all the players in the game
+        """
+        self.allplayer = allplayer
+
+    def updatePlayer(self, player):
+        """
+        The function takes in a player object and updates the player object in the game class to the
+        player object passed in
+
+        :param player: The player object
+        """
+        self.player = player
+
+    def updateplayButton(self, button):
+        """
+        The function takes in a button as an argument and sets the playbutton variable to the button
+
+        :param button: The button that is being updated
+        """
+        self.playbutton = button
+
+    def updateplaceButton(self, placeButton):
+        """
+        The function takes in a placeButton and sets the placeButton to the placeButton that was passed
+        in
+
+        :param placeButton: The button that is being updated
+        """
+        self.placebutton = placeButton
+
+    def updatepassButton(self, passButton):
+        """
+        The function takes in a button and sets it as the pass button
+
+        :param passButton: The button that is clicked to pass the turn
+        """
+        self.passbutton = passButton
+
+    def updateGamestatus(self, gamestart):
+        """
+        The function takes in a boolean value and sets the value of the gamestart variable to the value
+        of the boolean value
+
+        :param gamestart: Boolean
+        """
+        self.gamestart = gamestart
+
+    def updateTable(self, table):
+        """
+        It takes a table as an argument and sets the table attribute of the object to the table argument
+
+        :param table: the table to update
+        """
+        self.table = table
+
+    def updateTurn(self, playertoplay):
+        """
+        It takes the current player to play and updates the player to play to the next player
+
+        :param playertoplay: The player who's turn it is to play
+        """
+        self.playertoplay = playertoplay
