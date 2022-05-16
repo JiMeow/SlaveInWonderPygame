@@ -4,7 +4,7 @@ import pygame
 import random
 import time
 
-from button import Button
+from button import Button, PlayButton, PlaceButton
 from network import Network
 from layout import Layout
 from card import Card
@@ -69,7 +69,7 @@ class Main():
     def lobby(self):
         # gui in lobby
         run = True
-        playbutton = Button(self.win, (718, 382, 100, 100))
+        playbutton = PlayButton(self.win, (718, 382, 100, 100))
         while run:
             # set bg as black
             self.win.fill((0, 0, 0))
@@ -148,6 +148,7 @@ class Main():
 
         # game loop
         run = True
+        placebutton = PlaceButton(self.win, (748, 720, 72, 15))
         while run:
             # set bg as black
             self.win.fill((0, 0, 0))
@@ -187,7 +188,7 @@ class Main():
                                 if card.active == 1:
                                     nowactive.append(card)
                                     val = card.val
-                            # check if click on not same value of activae card cancle active all card else continue
+                            # check if click on not same value of activae card cancel active all card else continue
                             if self.player.card[newactive].val != val:
                                 for card in nowactive:
                                     card.click()
@@ -206,6 +207,7 @@ class Main():
             # draw all component
             self.layout.updateAllplayer(self.allplayer)
             self.layout.updatePlayer(self.player)
+            self.layout.updateButton(placebutton)
             self.layout.updateGamestatus(self.gamestart)
             self.layout.drawgame()
             # update game status
