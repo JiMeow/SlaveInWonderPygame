@@ -200,7 +200,6 @@ class Main():
                 placebutton.get_event(event)
 
             if placebutton.ispress:
-                print("place")
                 table.place(self.player.card)
                 placebutton.ispress = False
 

@@ -1,3 +1,5 @@
+from re import S
+from cv2 import transform
 import pygame
 import random
 
@@ -26,23 +28,28 @@ class Table:
 
     def draw(self, screen):
         historyindex = 0
+        self.keepcard = self.keepcard[-5:]
+        self.movecordinate = self.movecordinate[-5:]
         for listcard in self.keepcard:
             rect = pygame.Rect((0, 0, 0, 0))
             rect.center = (
                 self.rect.center[0], self.rect.center[1])
             for index in range(len(listcard)):
+                name, angle = listcard[index]
+                img = pygame.transform.rotate(pygame.transform.scale(
+                    pygame.image.load(f"{name}"), (40, 60)), angle)
                 if len(listcard) == 1:
                     screen.blit(
-                        listcard[index], (rect.x+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 2:
                     screen.blit(
-                        listcard[index], (rect.x-20+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-20+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 3:
                     screen.blit(
-                        listcard[index], (rect.x-40+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-40+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 4:
                     screen.blit(
-                        listcard[index], (rect.x-60+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-60+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
             historyindex += 1
 
     def place(self, listcard):
@@ -82,9 +89,8 @@ class Table:
             self.val = activecard[0].val
             self.value = activecard[-1].value
             angletorotate = random.randint(-30, 30)
-            img = [pygame.transform.rotate(pygame.transform.scale(
-                pygame.image.load(f"photo/cardsprite/{activecard[0].name}"), (40, 60)), angletorotate)]
-            self.keepcard.append(img)
+            data = [(f"photo/cardsprite/{activecard[0].name}", angletorotate)]
+            self.keepcard.append(data)
             self.movecordinate.append(
                 (random.randint(-10, 10), random.randint(-10, 10)))
         if len(activecard) == 2:
@@ -93,7 +99,9 @@ class Table:
             angletorotate = random.randint(-30, 30)
             img = [pygame.transform.rotate(pygame.transform.scale(
                 pygame.image.load(f"photo/cardsprite/{activecard[i].name}"), (40, 60)), angletorotate) for i in range(2)]
-            self.keepcard.append(img)
+            data = [
+                (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(2)]
+            self.keepcard.append(data)
             self.movecordinate.append(
                 (random.randint(-10, 10), random.randint(-10, 10)))
         if len(activecard) == 3:
@@ -102,7 +110,9 @@ class Table:
             angletorotate = random.randint(-30, 30)
             img = [pygame.transform.rotate(pygame.transform.scale(
                 pygame.image.load(f"photo/cardsprite/{activecard[i].name}"), (40, 60)), angletorotate) for i in range(3)]
-            self.keepcard.append(img)
+            data = [
+                (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
+            self.keepcard.append(data)
             self.movecordinate.append(
                 (random.randint(-10, 10), random.randint(-10, 10)))
         if len(activecard) == 4:
@@ -111,7 +121,9 @@ class Table:
             angletorotate = random.randint(-30, 30)
             img = [pygame.transform.rotate(pygame.transform.scale(
                 pygame.image.load(f"photo/cardsprite/{activecard[i].name}"), (40, 60)), angletorotate) for i in range(3)]
-            self.keepcard.append(img)
+            data = [
+                (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
+            self.keepcard.append(data)
             self.movecordinate.append(
                 (random.randint(-10, 10), random.randint(-10, 10)))
         self.cardtype = "odd" if len(activecard) % 2 == 1 else "even"
