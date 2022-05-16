@@ -1,6 +1,7 @@
 import pygame
 
 
+# It's a class that creates a button object that can be clicked on and off.
 class Button():
 
     def __init__(self, win, rect):
@@ -17,6 +18,7 @@ class Button():
             self.ispress = not self.ispress
 
 
+# It's a button that draws a rectangle and a text on the screen use to play game (got ot game state).
 class PlayButton(Button):
 
     def __init__(self, win, rect):
@@ -30,6 +32,7 @@ class PlayButton(Button):
             center=(self.rect.centerx, self.rect.centery)))
 
 
+# It's a button that draws a rectangle and a text on the screen use for place card (in game state).
 class PlaceButton(Button):
 
     def __init__(self, win, rect):
@@ -43,6 +46,7 @@ class PlaceButton(Button):
             center=(self.rect.centerx, self.rect.centery)))
 
 
+# It's a button that says "Pass" on it (in game state).
 class PassButton(Button):
 
     def __init__(self, win, rect):
