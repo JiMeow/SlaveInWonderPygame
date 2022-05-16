@@ -1,7 +1,6 @@
-from re import S
-from cv2 import transform
 import pygame
 import random
+import time
 
 from card import Card
 
@@ -41,16 +40,16 @@ class Table:
                     pygame.image.load(f"{name}"), (40, 60)), angle)
                 if len(listcard) == 1:
                     screen.blit(
-                        img, (rect.x+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
                 if len(listcard) == 2:
                     screen.blit(
-                        img, (rect.x-20+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-15+index*30+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
                 if len(listcard) == 3:
                     screen.blit(
-                        img, (rect.x-40+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-30+index*30+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
                 if len(listcard) == 4:
                     screen.blit(
-                        img, (rect.x-60+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+                        img, (rect.x-45+index*30+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
             historyindex += 1
 
     def place(self, listcard):
@@ -86,6 +85,7 @@ class Table:
                         listcard.remove(card)
 
     def setcardhere(self, activecard):
+        random.seed(int(time.time()))
         if len(activecard) == 1:
             self.val = activecard[0].val
             self.value = activecard[-1].value
@@ -93,7 +93,7 @@ class Table:
             data = [(f"photo/cardsprite/{activecard[0].name}", angletorotate)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                (random.randint(-10, 10), random.randint(-10, 10)))
+                [(random.randint(-10, 10), random.randint(-10, 10))])
         if len(activecard) == 2:
             self.val = activecard[0].val
             self.value = activecard[-1].value
@@ -104,7 +104,7 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(2)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                (random.randint(-10, 10), random.randint(-10, 10)))
+                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(2)])
         if len(activecard) == 3:
             self.val = activecard[0].val
             self.value = activecard[-1].value*1000
@@ -115,7 +115,7 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                (random.randint(-10, 10), random.randint(-10, 10)))
+                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(3)])
         if len(activecard) == 4:
             self.val = activecard[0].val
             self.value = activecard[-1].value*1000
@@ -126,6 +126,6 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                (random.randint(-10, 10), random.randint(-10, 10)))
+                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(4)])
         self.cardtype = "odd" if len(activecard) % 2 == 1 else "even"
         self.cardcount += 1
