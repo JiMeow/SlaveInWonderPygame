@@ -14,9 +14,7 @@ class Button():
 
     def on_click(self, event):
         if self.rect.collidepoint(event.pos):
-            self.ispress = True
-        else:
-            self.ispress = False
+            self.ispress = not self.ispress
 
     def draw(self):
         pygame.draw.rect(self.win, (255, 255, 255), self.rect)
@@ -25,6 +23,31 @@ class Button():
         self.win.blit(textplay, textplay.get_rect(
             center=(self.rect.centerx, self.rect.centery)))
 
+
+class PlayButton(Button):
+
+    def __init__(self, win, rect):
+        super().__init__(win, rect)
+
+    def draw(self):
+        pygame.draw.rect(self.win, (255, 255, 255), self.rect)
+        textplay = pygame.font.Font(None, int(20)).render(
+            "Play game", True, "black")
+        self.win.blit(textplay, textplay.get_rect(
+            center=(self.rect.centerx, self.rect.centery)))
+
+
+class PlaceButton(Button):
+
+    def __init__(self, win, rect):
+        super().__init__(win, rect)
+
+    def draw(self):
+        pygame.draw.rect(self.win, (255, 255, 255), self.rect)
+        textplay = pygame.font.Font(None, int(20)).render(
+            "Place card", True, "black")
+        self.win.blit(textplay, textplay.get_rect(
+            center=(self.rect.centerx, self.rect.centery)))
 # screen = pygame.display.set_mode((800, 600))
 # bs = BookSkill(rect=(100, 100, 100, 100))
 

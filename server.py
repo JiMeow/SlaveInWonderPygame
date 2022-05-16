@@ -54,11 +54,11 @@ def threaded_client(conn, id):
         except Exception as e:
             print(e)
             break
-
     print(id, "disconnected")
     playerdata.pop(id)
     currentPlayer[id] = 0
     conn.close()
+
 
 def main():
     for i in range(1, maxPlayers+1):

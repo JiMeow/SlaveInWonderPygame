@@ -52,9 +52,9 @@ class Layout:
         index = 0
         for player in playertodraw:
             if index == 0:
-                player.draw(self.win, 758, 744)
+                player.draw(self.win, 468, 764)
                 for i in range(len(player.card)):
-                    player.card[i].draw(self.win, 758-260+i*40, 744)
+                    player.card[i].draw(self.win, 498+i*40, 744)
             if index == 1:
                 player.draw(self.win, 100, 412)
             if index == 2:
@@ -67,6 +67,11 @@ class Layout:
             f"room id: {myroom}", True, "white")
         self.win.blit(textroom, (10, 10))
 
+        textstart = pygame.font.Font(None, int(30)).render(
+            "Start game", True, "white")
+        self.win.blit(textstart, (10, 50))
+
+        self.button.draw()
         pygame.display.update()
 
     def drawlobby(self):
@@ -101,10 +106,5 @@ class Layout:
             self.gamestart = 1
         else:
             self.button.ispress = 0
-
-        if self.gamestart == 1:
-            textstart = pygame.font.Font(None, int(30)).render(
-                "Start game", True, "white")
-            self.win.blit(textstart, (10, 50))
 
         pygame.display.update()

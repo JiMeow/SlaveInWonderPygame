@@ -1,6 +1,9 @@
 import socket
 import pickle
 
+from player import Player
+from card import Card
+
 server = "25.34.159.172"
 port = 5555
 
