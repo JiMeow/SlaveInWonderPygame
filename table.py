@@ -18,6 +18,9 @@ class Table:
         card.append(Card(name))
 
     def __init__(self):
+        """
+        The function is called when the player clicks on the card
+        """
         self.val = 0
         self.value = 0
         self.cardtype = ""
@@ -27,6 +30,11 @@ class Table:
         self.rect = pygame.Rect((718, 382, 100, 100))
 
     def draw(self, screen):
+        """
+        It draws the last 5 cards that were played on the screen
+        
+        :param screen: The screen that the cards will be draw on
+        """
         historyindex = 0
         self.keepcard = self.keepcard[-5:]
         self.movecordinate = self.movecordinate[-5:]
@@ -53,6 +61,13 @@ class Table:
             historyindex += 1
 
     def place(self, listcard):
+        """
+        If the card is a zero, place the card. If the card is odd, place the card if the value of the
+        card is greater than the value of the card on the board. If the card is even, place the card if
+        the value of the card is greater than the value of the card on the board
+        
+        :param listcard: list of cards
+        """
         activecard = []
         for card in listcard:
             if card.active:
@@ -85,6 +100,11 @@ class Table:
                         listcard.remove(card)
 
     def setcardhere(self, activecard):
+        """
+        It takes a list of cards, and then randomly rotates each card and places it on the screen
+        
+        :param activecard: list of cards
+        """
         random.seed(int(time.time()))
         if len(activecard) == 1:
             self.val = activecard[0].val
