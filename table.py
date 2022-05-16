@@ -22,6 +22,7 @@ class Table:
         self.val = 0
         self.value = 0
         self.cardtype = ""
+        self.cardcount = 0
         self.keepcard = []
         self.movecordinate = []
         self.rect = pygame.Rect((718, 382, 100, 100))
@@ -127,3 +128,4 @@ class Table:
             self.movecordinate.append(
                 (random.randint(-10, 10), random.randint(-10, 10)))
         self.cardtype = "odd" if len(activecard) % 2 == 1 else "even"
+        self.cardcount += 1

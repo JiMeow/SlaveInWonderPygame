@@ -19,24 +19,37 @@ def getDataFromServer(network, player, gamestart, data):
     data["gamestart"] = newdata["gamestart"]
 
 
-def setDataFromServerGame(data, allplayer, ):
+def setDataFromServer(data, allplayer):
     resetDictdata(allplayer)
     setDictdata(allplayer, data["allplayer"])
 
 
-def getDataFromServerGame(network, player, gamestart, data):
+def getDataFromServerGame(network, player, gamestart, table, data):
     newdata = network.send({
         "player": player,
         "gamestart": gamestart,
+        "table": table,
     })
     resetDictdata(data)
     data["allplayer"] = newdata["allplayer"]
     data["gamestart"] = newdata["gamestart"]
+    data["table"] = newdata["table"]
 
 
-def setDataFromServer(data, allplayer):
+def setDataFromServerGame(data, allplayer, table):
     resetDictdata(allplayer)
     setDictdata(allplayer, data["allplayer"])
+    setClassTable(table, data["table"])
+
+
+def setClassTable(table, data):
+    if table.value < data.value:
+        table.val = data.val
+        table.value = data.value
+        table.cardtype = data.cardtype
+        table.cardcount = data.cardcount
+        table.keepcard = data.keepcard
+        table.movecordinate = data.movecordinate
 
 
 def countPlayerinRoom(allplayer, room):

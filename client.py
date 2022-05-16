@@ -57,7 +57,8 @@ class Main():
         # init data for accept data from server
         self.tempdata = {
             "allplayer": dict(self.allplayer),
-            "gamestart": 0
+            "gamestart": 0,
+            "table": Table()
         }
 
         # init layout
@@ -122,6 +123,7 @@ class Main():
             # update game status
             self.gamestart = max(self.gamestart, self.layout.gamestart)
             if self.gamestart == 1:
+                print("Game start")
                 self.game()
             pygame.display.update()
 
@@ -129,6 +131,10 @@ class Main():
         self.network.disconnect()
 
     def game(self):
+        self.tempdata = {
+            "allplayer": dict(self.allplayer),
+            "table": Table()
+        }
         # set seed
         random.seed(self.seed)
 
@@ -158,10 +164,10 @@ class Main():
             self.clock.tick(60)
             if not self.thread.is_alive():
                 # set data from server
-                setDataFromServer(self.tempdata, self.allplayer)
+                setDataFromServerGame(self.tempdata, self.allplayer, table)
                 # start thread
-                self.thread = Thread(target=getDataFromServer, args=(
-                    self.network, self.player, self.gamestart, self.tempdata))
+                self.thread = Thread(target=getDataFromServerGame, args=(
+                    self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
 
             # handle all events
@@ -205,10 +211,10 @@ class Main():
 
             if not self.thread.is_alive():
                 # set data from server
-                setDataFromServer(self.tempdata, self.allplayer)
+                setDataFromServerGame(self.tempdata, self.allplayer, table)
                 # start thread
-                self.thread = Thread(target=getDataFromServer, args=(
-                    self.network, self.player, self.gamestart, self.tempdata))
+                self.thread = Thread(target=getDataFromServerGame, args=(
+                    self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
 
             # draw all component
@@ -218,8 +224,6 @@ class Main():
             self.layout.updateGamestatus(self.gamestart)
             self.layout.updateTable(table)
             self.layout.drawgame()
-            # update game status
-            self.gamestart = max(self.gamestart, self.layout.gamestart)
             pygame.display.update()
 
 

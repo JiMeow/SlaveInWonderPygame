@@ -6,6 +6,8 @@ import pickle
 import pygame
 import hashlib
 import random
+
+from table import Table
 from player import Player
 
 server = "25.34.159.172"
@@ -21,6 +23,7 @@ maxPlayers = 50
 
 playerdata = {}
 roomstate = {}
+table = {}
 
 seed = {}
 
@@ -39,8 +42,14 @@ def threaded_client(conn, id):
             if playerdata[id].room not in roomstate:
                 seed[playerdata[id].room] = random.randint(0, 100000)
                 roomstate[playerdata[id].room] = False
+                table[playerdata[id].room] = Table()
+            # if "gamestart" in data:
+            # Checking if the key "gamestart" is in the data dictionary.
             roomstate[playerdata[id].room] = max(
                 roomstate[playerdata[id].room], data["gamestart"])
+            if "table" in data:
+                if data["table"].cardcount >= table[playerdata[id].room].cardcount:
+                    table[playerdata[id].room] = data["table"]
             if not data:
                 print("Disconnected")
                 break
@@ -48,7 +57,8 @@ def threaded_client(conn, id):
                 reply = {
                     "allplayer": playerdata,
                     "gamestart": roomstate[playerdata[id].room],
-                    "seed": seed[playerdata[id].room]
+                    "seed": seed[playerdata[id].room],
+                    "table": table[playerdata[id].room]
                 }
             conn.sendall(pickle.dumps(reply))
         except Exception as e:
