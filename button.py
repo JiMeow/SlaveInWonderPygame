@@ -41,13 +41,16 @@ class PlaceButton(Button):
             "Place card", True, "black")
         self.win.blit(textplay, textplay.get_rect(
             center=(self.rect.centerx, self.rect.centery)))
-# screen = pygame.display.set_mode((800, 600))
-# bs = BookSkill(rect=(100, 100, 100, 100))
 
-# while not done:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             done = True
-#         bs.get_event(event)
-#     bs.draw(screen)
-#     pygame.display.update()
+
+class PassButton(Button):
+
+    def __init__(self, win, rect):
+        super().__init__(win, rect)
+
+    def draw(self):
+        pygame.draw.rect(self.win, (255, 255, 255), self.rect)
+        textplay = pygame.font.Font(None, int(20)).render(
+            "Pass", True, "black")
+        self.win.blit(textplay, textplay.get_rect(
+            center=(self.rect.centerx, self.rect.centery)))
