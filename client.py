@@ -8,6 +8,7 @@ from button import Button, PlayButton, PlaceButton
 from network import Network
 from layout import Layout
 from card import Card
+from table import Table
 
 from helper import *
 
@@ -148,7 +149,8 @@ class Main():
 
         # game loop
         run = True
-        placebutton = PlaceButton(self.win, (748, 720, 72, 15))
+        placebutton = PlaceButton(self.win, (732, 819, 72, 15))
+        table = Table()
         while run:
             # set bg as black
             self.win.fill((0, 0, 0))
@@ -195,6 +197,12 @@ class Main():
                                 self.player.card[newactive].click()
                             else:
                                 self.player.card[newactive].click()
+                placebutton.get_event(event)
+
+            if placebutton.ispress:
+                print("place")
+                table.place(self.player.card)
+                placebutton.ispress = False
 
             if not self.thread.is_alive():
                 # set data from server
@@ -209,6 +217,7 @@ class Main():
             self.layout.updatePlayer(self.player)
             self.layout.updateButton(placebutton)
             self.layout.updateGamestatus(self.gamestart)
+            self.layout.updateTable(table)
             self.layout.drawgame()
             # update game status
             self.gamestart = max(self.gamestart, self.layout.gamestart)
