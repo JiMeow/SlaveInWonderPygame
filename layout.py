@@ -39,6 +39,9 @@ class Layout:
     def updateGamestatus(self, gamestart):
         self.gamestart = gamestart
 
+    def updateTable(self, table):
+        self.table = table
+
     def drawgame(self):
         myroom = self.player.room
         allplayer = list(self.allplayer.items())
@@ -72,6 +75,7 @@ class Layout:
         self.win.blit(textstart, (10, 50))
 
         self.button.draw()
+        self.table.draw(self.win)
         pygame.display.update()
 
     def drawlobby(self):
