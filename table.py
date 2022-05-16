@@ -25,6 +25,7 @@ class Table:
         self.rect = pygame.Rect((718, 382, 100, 100))
 
     def draw(self, screen):
+        historyindex = 0
         for listcard in self.keepcard:
             rect = pygame.Rect((0, 0, 0, 0))
             rect.center = (
@@ -32,16 +33,17 @@ class Table:
             for index in range(len(listcard)):
                 if len(listcard) == 1:
                     screen.blit(
-                        listcard[index], (rect.x+self.movecordinate[0], rect.y+self.movecordinate[1], 40, 60))
+                        listcard[index], (rect.x+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 2:
                     screen.blit(
-                        listcard[index], (rect.x-20+index*40+self.movecordinate[0], rect.y+self.movecordinate[1], 40, 60))
+                        listcard[index], (rect.x-20+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 3:
                     screen.blit(
-                        listcard[index], (rect.x-40+index*40+self.movecordinate[0], rect.y+self.movecordinate[1], 40, 60))
+                        listcard[index], (rect.x-40+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
                 if len(listcard) == 4:
                     screen.blit(
-                        listcard[index], (rect.x-60+index*40+self.movecordinate[0], rect.y+self.movecordinate[1], 40, 60))
+                        listcard[index], (rect.x-60+index*40+self.movecordinate[historyindex][0], rect.y+self.movecordinate[historyindex][1], 40, 60))
+            historyindex += 1
 
     def place(self, listcard):
         activecard = []
