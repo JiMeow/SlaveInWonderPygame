@@ -1,11 +1,16 @@
 import pygame
 
 
+# It's a class that represents a playing card.
 class Card():
     def __init__(self, name):
+        """
+        It takes a string, splits it into two parts, and then assigns a value to the second part
+
+        :param name: the name of the card
+        """
         self.name = name
         self.flowers, self.val = name[:-4].split("-")
-        # set card values
         if self.val == 'T':
             self.val = 10
         elif self.val == 'J':
@@ -22,8 +27,15 @@ class Card():
             self.val = int(self.val)
         self.active = False
         self.value = self.val+ord(self.flowers[0])/1000
-        
+
     def draw(self, screen, x, y):
+        """
+        If the card is active, draw it with a y offset of -20. Otherwise, draw it with a y offset of 0.
+
+        :param screen: the screen you want to draw the card on
+        :param x: x position of the card
+        :param y: y position of the card
+        """
         img = pygame.transform.scale(
             pygame.image.load(f"photo/cardsprite/{self.name}"), (40, 60))
         # draw card if card active
@@ -34,7 +46,9 @@ class Card():
             screen.blit(img, (x, y))
 
     def click(self):
-        # if card is active, set card not active else set card active
+        """
+        If the button is active, it will become inactive, and if it is inactive, it will become active
+        """
         self.active = not self.active
 
     # set for sort
