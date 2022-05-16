@@ -21,7 +21,8 @@ class Card():
         else:
             self.val = int(self.val)
         self.active = False
-
+        self.value = self.val+ord(self.flowers[0])/1000
+        
     def draw(self, screen, x, y):
         img = pygame.transform.scale(
             pygame.image.load(f"photo/cardsprite/{self.name}"), (40, 60))
