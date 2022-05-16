@@ -19,6 +19,21 @@ def getDataFromServer(network, player, gamestart, data):
     data["gamestart"] = newdata["gamestart"]
 
 
+def setDataFromServerGame(data, allplayer, ):
+    resetDictdata(allplayer)
+    setDictdata(allplayer, data["allplayer"])
+
+
+def getDataFromServerGame(network, player, gamestart, data):
+    newdata = network.send({
+        "player": player,
+        "gamestart": gamestart,
+    })
+    resetDictdata(data)
+    data["allplayer"] = newdata["allplayer"]
+    data["gamestart"] = newdata["gamestart"]
+
+
 def setDataFromServer(data, allplayer):
     resetDictdata(allplayer)
     setDictdata(allplayer, data["allplayer"])
