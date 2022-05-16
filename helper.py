@@ -34,6 +34,7 @@ def getDataFromServerGame(network, player, gamestart, table, data):
     data["allplayer"] = newdata["allplayer"]
     data["gamestart"] = newdata["gamestart"]
     data["table"] = newdata["table"]
+    data["turn"] = newdata["turn"]
 
 
 def setDataFromServerGame(data, allplayer, table):

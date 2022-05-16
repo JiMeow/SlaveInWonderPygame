@@ -10,6 +10,7 @@ class Player:
         self.width = 20
         self.high = 20
         self.card = []
+        self.iscompleteturn = False
 
     def draw(self, screen, x, y):
         pygame.draw.rect(screen, self.color, (x, y, self.width, self.high))

@@ -4,7 +4,7 @@ import pygame
 import random
 import time
 
-from button import Button, PlayButton, PlaceButton
+from button import PassButton, PlayButton, PlaceButton
 from network import Network
 from layout import Layout
 from card import Card
@@ -117,7 +117,7 @@ class Main():
             # draw all component
             self.layout.updateAllplayer(self.allplayer)
             self.layout.updatePlayer(self.player)
-            self.layout.updateButton(playbutton)
+            self.layout.updateplayButton(playbutton)
             self.layout.updateGamestatus(self.gamestart)
             self.layout.drawlobby()
             # update game status
@@ -133,7 +133,8 @@ class Main():
     def game(self):
         self.tempdata = {
             "allplayer": dict(self.allplayer),
-            "table": Table()
+            "table": Table(),
+            "turn": -1,
         }
         # set seed
         random.seed(self.seed)
@@ -155,8 +156,14 @@ class Main():
 
         # game loop
         run = True
-        placebutton = PlaceButton(self.win, (732, 819, 72, 15))
+        # placebutton = PlaceButton(self.win, (732, 819, 72, 15))
+        placebutton = PlaceButton(self.win, (632, 819, 72, 15))
+        passbutton = PassButton(self.win, (804, 819, 72, 15))
         table = Table()
+
+        self.thread = Thread(target=getDataFromServerGame, args=(
+            self.network, self.player, self.gamestart, table, self.tempdata))
+
         while run:
             # set bg as black
             self.win.fill((0, 0, 0))
@@ -165,10 +172,12 @@ class Main():
             if not self.thread.is_alive():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
+                turn = self.tempdata["turn"]
                 # start thread
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
+                self.player.iscompleteturn = False
 
             # handle all events
             for event in pygame.event.get():
@@ -204,24 +213,35 @@ class Main():
                             else:
                                 self.player.card[newactive].click()
                 placebutton.get_event(event)
+                passbutton.get_event(event)
 
-            if placebutton.ispress:
+            if placebutton.ispress and self.player.id == turn.id:
+                cardcount = table.cardcount
                 table.place(self.player.card)
-                placebutton.ispress = False
+                self.player.iscompleteturn = table.cardcount - cardcount
+            placebutton.ispress = False
+
+            if passbutton.ispress and self.player.id == turn.id:
+                self.player.iscompleteturn = True
+            passbutton.ispress = False
 
             if not self.thread.is_alive():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
+                turn = self.tempdata["turn"]
                 # start thread
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
+                self.player.iscompleteturn = False
 
             # draw all component
             self.layout.updateAllplayer(self.allplayer)
             self.layout.updatePlayer(self.player)
-            self.layout.updateButton(placebutton)
+            self.layout.updateplaceButton(placebutton)
+            self.layout.updatepassButton(passbutton)
             self.layout.updateGamestatus(self.gamestart)
+            self.layout.updateTurn(turn)
             self.layout.updateTable(table)
             self.layout.drawgame()
             pygame.display.update()
