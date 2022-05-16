@@ -16,13 +16,6 @@ class Button():
         if self.rect.collidepoint(event.pos):
             self.ispress = not self.ispress
 
-    def draw(self):
-        pygame.draw.rect(self.win, (255, 255, 255), self.rect)
-        textplay = pygame.font.Font(None, int(20)).render(
-            "Play game", True, "black")
-        self.win.blit(textplay, textplay.get_rect(
-            center=(self.rect.centerx, self.rect.centery)))
-
 
 class PlayButton(Button):
 
