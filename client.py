@@ -177,6 +177,7 @@ class Main():
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
+                # reset turn complete
                 self.player.iscompleteturn = False
 
             # handle all events
@@ -215,12 +216,14 @@ class Main():
                 placebutton.get_event(event)
                 passbutton.get_event(event)
 
+            # check if player press button in his turn
             if placebutton.ispress and self.player.id == turn.id:
                 cardcount = table.cardcount
                 table.place(self.player.card)
                 self.player.iscompleteturn = table.cardcount - cardcount
             placebutton.ispress = False
 
+            # check if player press button in his turn
             if passbutton.ispress and self.player.id == turn.id:
                 self.player.iscompleteturn = True
             passbutton.ispress = False
@@ -233,6 +236,7 @@ class Main():
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
+                # reset turn complete
                 self.player.iscompleteturn = False
 
             # draw all component
