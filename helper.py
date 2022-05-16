@@ -53,6 +53,15 @@ def setDataFromServer(data, allplayer):
 
 
 def getDataFromServerGame(network, player, gamestart, table, data):
+    """
+    It sends a request to the server, and then it receives a response from the server
+
+    :param network: the network object
+    :param player: The player's name
+    :param gamestart: boolean, if the game has started
+    :param table: the table of the game
+    :param data: a dictionary that contains all the data that the server sends to the client
+    """
     newdata = network.send({
         "player": player,
         "gamestart": gamestart,
@@ -66,12 +75,27 @@ def getDataFromServerGame(network, player, gamestart, table, data):
 
 
 def setDataFromServerGame(data, allplayer, table):
+    """
+    It takes a dictionary of dictionaries, and a dictionary of classes, and copies the data from the
+    dictionary of dictionaries into the dictionary of classes
+
+    :param data: a dictionary of all the data from the server
+    :param allplayer: a dictionary of all players in the game
+    :param table: a class that contains all the data for the table
+    """
     resetDictdata(allplayer)
     setDictdata(allplayer, data["allplayer"])
     setClassTable(table, data["table"])
 
 
 def setClassTable(table, data):
+    """
+    If the value of the table is less than the value of the data, then set the value of the table to the
+    value of the data
+
+    :param table: The table that the data is being set to
+    :param data: The data that is being passed in
+    """
     if table.value < data.value:
         table.val = data.val
         table.value = data.value
@@ -82,6 +106,13 @@ def setClassTable(table, data):
 
 
 def countPlayerinRoom(allplayer, room):
+    """
+    It counts the number of players in a room
+
+    :param allplayer: a dictionary of all players in the game
+    :param room: the room you want to count the players in
+    :return: The number of players in a room.
+    """
     ans = 0
     for id, player in allplayer.items():
         if player.room == room:
