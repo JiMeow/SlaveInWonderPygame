@@ -55,22 +55,34 @@ class Layout:
         index = 0
         for player in playertodraw:
             if index == 0:
+                if self.playertoplay != -1 and player.id == self.playertoplay.id:
+                    pygame.draw.rect(self.win, (238, 0, 0),
+                                     (428, 764, 20, 20))
                 player.draw(self.win, 468, 764)
                 for i in range(len(player.card)):
                     player.card[i].draw(self.win, 498+i*40, 744)
             if index == 1:
+                if self.playertoplay != -1 and player.id == self.playertoplay.id:
+                    pygame.draw.rect(self.win, (238, 0, 0),
+                                     (60, 412, 20, 20))
                 player.draw(self.win, 100, 412)
                 textnumberofcard = pygame.font.Font(None, int(15)).render(
                     f"{len(player.card)}", True, "white")
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(110, 402)))
             if index == 2:
+                if self.playertoplay != -1 and player.id == self.playertoplay.id:
+                    pygame.draw.rect(self.win, (238, 0, 0),
+                                     (718, 100, 20, 20))
                 player.draw(self.win, 758, 100)
                 textnumberofcard = pygame.font.Font(None, int(15)).render(
                     f"{len(player.card)}", True, "white")
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(768, 90)))
             if index == 3:
+                if self.playertoplay != -1 and player.id == self.playertoplay.id:
+                    pygame.draw.rect(self.win, (238, 0, 0),
+                                     (1386, 412, 20, 20))
                 player.draw(self.win, 1426, 412)
                 textnumberofcard = pygame.font.Font(None, int(15)).render(
                     f"{len(player.card)}", True, "white")
