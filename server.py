@@ -34,6 +34,9 @@ turn = {}
 # key: room, value: List[players] in the room
 playerinroom = {}
 
+# key: room, value: List[players] in the room (already win)
+winner = {}
+
 seed = {}
 
 
@@ -74,32 +77,39 @@ def threaded_client(conn, id):
 
             # if game start
             if "table" in data:
+                room = playerdata[id].room
                 # update table if table from client is newer than server by check cardcount
-                if data["table"].cardcount > table[playerdata[id].room].cardcount:
-                    table[playerdata[id].room] = data["table"]
+                if data["table"].cardcount > table[room].cardcount:
+                    table[room] = data["table"]
                     # print(data["table"].cardcount,
-                    #       table[playerdata[id].room].whopass)
+                    #       table[room].whopass)
                 # set default value of turn
-                if playerdata[id].room not in turn:
-                    turn[playerdata[id].room] = -1
+                if room not in turn:
+                    turn[room] = -1
                 # find club-3 card to set first player
-                if turn[playerdata[id].room] == -1:
-                    for index in range(len(playerinroom[playerdata[id].room])):
-                        if len(playerinroom[playerdata[id].room][index].card) > 0:
-                            if playerinroom[playerdata[id].room][index].card[0].name == "club-3.png":
-                                turn[playerdata[id].room] = playerdata[id]
+                if turn[room] == -1:
+                    for index in range(len(playerinroom[room])):
+                        if len(playerinroom[room][index].card) > 0:
+                            if playerinroom[room][index].card[0].name == "club-3.png":
+                                turn[room] = playerdata[id]
                                 break
                 else:
                     # set another player to turn
-                    if turn[playerdata[id].room].id == playerdata[id].id and playerdata[id].iscompleteturn:
+                    if turn[room].id == playerdata[id].id and playerdata[id].iscompleteturn:
                         print(playerdata[id].name,
                               playerdata[id].iscompleteturn)
-                        for index in range(len(playerinroom[playerdata[id].room])):
-                            if playerinroom[playerdata[id].room][index].name == turn[playerdata[id].room].name:
-                                turn[playerdata[id].room] = playerinroom[playerdata[id].room][(
+                        for index in range(len(playerinroom[room])):
+                            if playerinroom[room][index].name == turn[room].name:
+                                turn[room] = playerinroom[room][(
                                     index+1) % 4]
                                 playerdata[id].iscompleteturn = False
                                 break
+                if len(playerdata[id].card) == 0:
+                    if room not in winner:
+                        winner[room] = []
+                    if playerdata[id] not in winner[room]:
+                        winner[room].append(playerdata[id])
+                    print(winner[room])
             if not data:
                 print("Disconnected")
                 break
