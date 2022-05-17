@@ -52,7 +52,7 @@ def setDataFromServer(data, allplayer):
     setDictdata(allplayer, data["allplayer"])
 
 
-def getDataFromServerGame(network, player, gamestart, table, data):
+def getDataFromServerGame1(network, player, gamestart, table, data):
     """
     It sends a request to the server, and then it receives a response from the server
 

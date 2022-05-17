@@ -39,7 +39,7 @@ class Layout:
         self.win = win
         self.gamestart = 0
 
-    def drawgame(self):
+    def drawgamephase1(self):
         """
         It draws the game
         """

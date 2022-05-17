@@ -129,13 +129,13 @@ class Main():
             self.gamestart = max(self.gamestart, self.layout.gamestart)
             if self.gamestart == 1:
                 print("Game start")
-                self.game()
+                self.gamephase1()
             pygame.display.update()
 
         pygame.quit()
         self.network.disconnect()
 
-    def game(self):
+    def gamephase1(self):
         self.tempdata = {
             "allplayer": dict(self.allplayer),
             "table": Table(),
@@ -166,7 +166,7 @@ class Main():
         passbutton = PassButton(self.win, (804, 819, 72, 15))
         table = Table()
 
-        self.thread = Thread(target=getDataFromServerGame, args=(
+        self.thread = Thread(target=getDataFromServerGame1, args=(
             self.network, self.player, self.gamestart, table, self.tempdata))
 
         resettable = False
@@ -189,7 +189,7 @@ class Main():
                     table.keepcard = []
                     table.movecordinate = []
                     table.whopass = []
-                self.thread = Thread(target=getDataFromServerGame, args=(
+                self.thread = Thread(target=getDataFromServerGame1, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
                 # reset turn complete
@@ -272,7 +272,7 @@ class Main():
                     table.movecordinate = []
                     table.whopass = []
                 # start thread
-                self.thread = Thread(target=getDataFromServerGame, args=(
+                self.thread = Thread(target=getDataFromServerGame1, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
                 # reset turn complete
@@ -287,7 +287,7 @@ class Main():
             self.layout.updateGamestatus(self.gamestart)
             self.layout.updateTurn(turn)
             self.layout.updateTable(table)
-            self.layout.drawgame()
+            self.layout.drawgamephase1()
             pygame.display.update()
 
 
