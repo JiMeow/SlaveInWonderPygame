@@ -80,7 +80,7 @@ class Table:
                 listcard.remove(card)
         elif self.cardtype == "odd":
             if len(activecard) == 1:
-                if activecard[0].value > self.value:
+                if activecard[-1].value > self.value:
                     self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
@@ -91,7 +91,7 @@ class Table:
                         listcard.remove(card)
         elif self.cardtype == "even":
             if len(activecard) == 2:
-                if activecard[0].value > self.value:
+                if activecard[-1].value > self.value:
                     self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
