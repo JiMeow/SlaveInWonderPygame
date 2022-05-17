@@ -96,13 +96,14 @@ def setClassTable(table, data):
     :param table: The table that the data is being set to
     :param data: The data that is being passed in
     """
-    if table.value < data.value:
+    if table.cardcount <= data.cardcount:
         table.val = data.val
         table.value = data.value
         table.cardtype = data.cardtype
         table.cardcount = data.cardcount
         table.keepcard = data.keepcard
         table.movecordinate = data.movecordinate
+        table.whopass = data.whopass
 
 
 def countPlayerinRoom(allplayer, room):

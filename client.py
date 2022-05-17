@@ -14,6 +14,9 @@ from helper import *
 
 # 1536 * 864 -> 768 * 432
 
+# next clear table when every one pass
+# update time count down
+
 
 class Main():
     cardname = [
@@ -164,6 +167,7 @@ class Main():
         self.thread = Thread(target=getDataFromServerGame, args=(
             self.network, self.player, self.gamestart, table, self.tempdata))
 
+        resettable = False
         while run:
             # set bg as black
             self.win.fill((0, 0, 0))
@@ -173,12 +177,23 @@ class Main():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
+                print(table.whopass)
                 # start thread
+                if resettable:
+                    table.val = 0
+                    table.value = 0
+                    table.cardtype = ""
+                    table.lassplayerid = 0
+                    table.cardcount += 1
+                    table.keepcard = []
+                    table.movecordinate = []
+                    table.whopass = []
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
                 # reset turn complete
                 self.player.iscompleteturn = False
+                resettable = False
 
             # handle all events
             for event in pygame.event.get():
@@ -216,28 +231,50 @@ class Main():
                 placebutton.get_event(event)
                 passbutton.get_event(event)
 
-            # check if player press button in his turn
-            if placebutton.ispress and self.player.id == turn.id:
-                cardcount = table.cardcount
-                table.place(self.player.card)
-                self.player.iscompleteturn = table.cardcount - cardcount
-            placebutton.ispress = False
+            if turn != -1 and self.player.id == turn.id:
+                if table.lassplayerid == self.player.id and len(table.whopass) == 3:
+                    resettable = True
+                # every one pass
+                if self.player.id in table.whopass:
+                    self.player.iscompleteturn = True
+                    table.cardcount += 1
 
-            # check if player press button in his turn
-            if passbutton.ispress and self.player.id == turn.id:
-                self.player.iscompleteturn = True
-            passbutton.ispress = False
+                # check if player press button in his turn
+                if placebutton.ispress and self.player.id not in table.whopass:
+                    cardcount = table.cardcount
+                    table.place(self.player.card, self.player.id)
+                    self.player.iscompleteturn = table.cardcount - cardcount
+                placebutton.ispress = False
+
+                # check if player press button in his turn
+                if passbutton.ispress:
+                    if self.player.id not in table.whopass:
+                        table.whopass.append(self.player.id)
+                    table.cardcount += 1
+                    self.player.iscompleteturn = True
+                passbutton.ispress = False
 
             if not self.thread.is_alive():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
+                print(table.whopass)
+                if resettable:
+                    table.val = 0
+                    table.value = 0
+                    table.cardtype = ""
+                    table.lassplayerid = 0
+                    table.cardcount += 100
+                    table.keepcard = []
+                    table.movecordinate = []
+                    table.whopass = []
                 # start thread
                 self.thread = Thread(target=getDataFromServerGame, args=(
                     self.network, self.player, self.gamestart, table, self.tempdata))
                 self.thread.start()
                 # reset turn complete
                 self.player.iscompleteturn = False
+                resettable = False
 
             # draw all component
             self.layout.updateAllplayer(self.allplayer)

@@ -28,11 +28,13 @@ class Table:
         self.keepcard = []
         self.movecordinate = []
         self.rect = pygame.Rect((718, 382, 100, 100))
+        self.lassplayerid = 0
+        self.whopass = []
 
     def draw(self, screen):
         """
         It draws the last 5 cards that were played on the screen
-        
+
         :param screen: The screen that the cards will be draw on
         """
         historyindex = 0
@@ -60,12 +62,12 @@ class Table:
                         img, (rect.x-45+index*30+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
             historyindex += 1
 
-    def place(self, listcard):
+    def place(self, listcard, playerid):
         """
         If the card is a zero, place the card. If the card is odd, place the card if the value of the
         card is greater than the value of the card on the board. If the card is even, place the card if
         the value of the card is greater than the value of the card on the board
-        
+
         :param listcard: list of cards
         """
         activecard = []
@@ -73,36 +75,36 @@ class Table:
             if card.active:
                 activecard.append(card)
         if self.value == 0:
-            self.setcardhere(activecard)
+            self.setcardhere(activecard, playerid)
             for card in activecard:
                 listcard.remove(card)
         elif self.cardtype == "odd":
             if len(activecard) == 1:
                 if activecard[0].value > self.value:
-                    self.setcardhere(activecard)
+                    self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
             elif len(activecard) == 3:
                 if activecard[-1].value*1000 > self.value:
-                    self.setcardhere(activecard)
+                    self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
         elif self.cardtype == "even":
             if len(activecard) == 2:
                 if activecard[0].value > self.value:
-                    self.setcardhere(activecard)
+                    self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
             elif len(activecard) == 4:
                 if activecard[-1].value*1000 > self.value:
-                    self.setcardhere(activecard)
+                    self.setcardhere(activecard, playerid)
                     for card in activecard:
                         listcard.remove(card)
 
-    def setcardhere(self, activecard):
+    def setcardhere(self, activecard, playerid):
         """
         It takes a list of cards, and then randomly rotates each card and places it on the screen
-        
+
         :param activecard: list of cards
         """
         random.seed(int(time.time()))
@@ -148,4 +150,5 @@ class Table:
             self.movecordinate.append(
                 [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(4)])
         self.cardtype = "odd" if len(activecard) % 2 == 1 else "even"
+        self.lassplayerid = playerid
         self.cardcount += 1
