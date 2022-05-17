@@ -33,8 +33,10 @@ class Main():
     def __init__(self):
 
         # accept player name and room id from user
-        name = input("Enter your name: ")
-        room = input("Enter room id: ")
+        # name = input("Enter your name: ")
+        # room = input("Enter room id: ")
+        name = f"test{random.randint(0, 100)}"
+        room = "1"
         # init network
         self.network = Network()
         # init pygame
@@ -243,7 +245,6 @@ class Main():
                     cardcount = table.cardcount
                     table.place(self.player.card, self.player.id)
                     self.player.iscompleteturn = table.cardcount - cardcount
-                placebutton.ispress = False
 
                 # check if player press button in his turn
                 if passbutton.ispress:
@@ -251,7 +252,9 @@ class Main():
                         table.whopass.append(self.player.id)
                     table.cardcount += 1
                     self.player.iscompleteturn = True
-                passbutton.ispress = False
+
+            placebutton.ispress = False
+            passbutton.ispress = False
 
             if not self.thread.is_alive():
                 # set data from server
