@@ -77,7 +77,8 @@ def threaded_client(conn, id):
                 # update table if table from client is newer than server by check cardcount
                 if data["table"].cardcount > table[playerdata[id].room].cardcount:
                     table[playerdata[id].room] = data["table"]
-                    print(data["table"].cardcount, table[playerdata[id].room].whopass)
+                    # print(data["table"].cardcount,
+                    #       table[playerdata[id].room].whopass)
                 # set default value of turn
                 if playerdata[id].room not in turn:
                     turn[playerdata[id].room] = -1

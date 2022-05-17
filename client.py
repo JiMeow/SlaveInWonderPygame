@@ -233,8 +233,8 @@ class Main():
             if turn != -1 and self.player.id == turn.id:
                 if table.lassplayerid == self.player.id and len(table.whopass) == 3:
                     resettable = True
-                # every one pass
-                if self.player.id in table.whopass:
+                # me pass or out of hand
+                if self.player.id in table.whopass or len(self.player.card) == 0:
                     self.player.iscompleteturn = True
                     table.cardcount += 1
 

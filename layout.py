@@ -60,10 +60,22 @@ class Layout:
                     player.card[i].draw(self.win, 498+i*40, 744)
             if index == 1:
                 player.draw(self.win, 100, 412)
+                textnumberofcard = pygame.font.Font(None, int(15)).render(
+                    f"{len(player.card)}", True, "white")
+                self.win.blit(textnumberofcard, textnumberofcard.get_rect(
+                    center=(110, 402)))
             if index == 2:
                 player.draw(self.win, 758, 100)
+                textnumberofcard = pygame.font.Font(None, int(15)).render(
+                    f"{len(player.card)}", True, "white")
+                self.win.blit(textnumberofcard, textnumberofcard.get_rect(
+                    center=(768, 90)))
             if index == 3:
                 player.draw(self.win, 1426, 412)
+                textnumberofcard = pygame.font.Font(None, int(15)).render(
+                    f"{len(player.card)}", True, "white")
+                self.win.blit(textnumberofcard, textnumberofcard.get_rect(
+                    center=(1436, 402)))
             index += 1
 
         textroom = pygame.font.Font(None, int(30)).render(
