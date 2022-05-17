@@ -74,7 +74,7 @@ def getDataFromServerGame1(network, player, gamestart, table, data):
     data["turn"] = newdata["turn"]
 
 
-def setDataFromServerGame(data, allplayer, table):
+def setDataFromServerGame1(data, allplayer, table):
     """
     It takes a dictionary of dictionaries, and a dictionary of classes, and copies the data from the
     dictionary of dictionaries into the dictionary of classes
@@ -86,6 +86,44 @@ def setDataFromServerGame(data, allplayer, table):
     resetDictdata(allplayer)
     setDictdata(allplayer, data["allplayer"])
     setClassTable(table, data["table"])
+
+
+def getDataFromServerGame2(network, player, gamestart, table, data):
+    """
+    It sends a request to the server, and then it receives a response from the server
+
+    :param network: the network object
+    :param player: The player's name
+    :param gamestart: boolean, if the game has started
+    :param table: the table of the game
+    :param data: a dictionary that contains all the data that the server sends to the client
+    """
+    newdata = network.send({
+        "player": player,
+        "gamestart": gamestart,
+        "table": table,
+    })
+    resetDictdata(data)
+    data["allplayer"] = newdata["allplayer"]
+    data["gamestart"] = newdata["gamestart"]
+    data["table"] = newdata["table"]
+    data["turn"] = newdata["turn"]
+    data["winner"] = newdata["winner"]
+
+
+def setDataFromServerGame2(data, allplayer, table, winnerfromlastgame):
+    """
+    It takes a dictionary of dictionaries, and a dictionary of classes, and copies the data from the
+    dictionary of dictionaries into the dictionary of classes
+
+    :param data: a dictionary of all the data from the server
+    :param allplayer: a dictionary of all players in the game
+    :param table: a class that contains all the data for the table
+    """
+    resetDictdata(allplayer)
+    setDictdata(allplayer, data["allplayer"])
+    setClassTable(table, data["table"])
+    setListdata(winnerfromlastgame, data["winner"])
 
 
 def setClassTable(table, data):
@@ -104,6 +142,20 @@ def setClassTable(table, data):
         table.keepcard = data.keepcard
         table.movecordinate = data.movecordinate
         table.whopass = data.whopass
+
+
+def setListdata(list, data):
+    """
+    It takes a list and a dictionary of dictionaries, and it sets the values of the list to the values
+    of the dictionary
+
+    :param list: a list
+    :param data: a dictionary of dictionaries
+    """
+    while(len(list) > 0):
+        list.pop(0)
+    for i in range(len(data)):
+        list.append(data[i])
 
 
 def countPlayerinRoom(allplayer, room):

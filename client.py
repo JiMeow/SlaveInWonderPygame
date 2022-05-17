@@ -177,7 +177,7 @@ class Main():
             self.clock.tick(60)
             if not self.thread.is_alive():
                 # set data from server
-                setDataFromServerGame(self.tempdata, self.allplayer, table)
+                setDataFromServerGame1(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
                 # start thread
                 if resettable:
@@ -260,7 +260,162 @@ class Main():
 
             if not self.thread.is_alive():
                 # set data from server
-                setDataFromServerGame(self.tempdata, self.allplayer, table)
+                setDataFromServerGame1(self.tempdata, self.allplayer, table)
+                turn = self.tempdata["turn"]
+                if resettable:
+                    table.val = 0
+                    table.value = 0
+                    table.cardtype = ""
+                    table.lassplayerid = 0
+                    table.cardcount += 100
+                    table.keepcard = []
+                    table.movecordinate = []
+                    table.whopass = []
+                # start thread
+                self.thread = Thread(target=getDataFromServerGame1, args=(
+                    self.network, self.player, self.gamestart, table, self.tempdata))
+                self.thread.start()
+                # reset turn complete
+                self.player.iscompleteturn = False
+                resettable = False
+
+            # draw all component
+            self.layout.updateAllplayer(self.allplayer)
+            self.layout.updatePlayer(self.player)
+            self.layout.updateplaceButton(placebutton)
+            self.layout.updatepassButton(passbutton)
+            self.layout.updateGamestatus(self.gamestart)
+            self.layout.updateTurn(turn)
+            self.layout.updateTable(table)
+            self.layout.drawgamephase1()
+            pygame.display.update()
+
+    def gamephase2(self):
+        self.tempdata = {
+            "allplayer": dict(self.allplayer),
+            "table": Table(),
+            "turn": -1,
+        }
+        # set seed
+        random.seed(self.seed)
+
+        # set player in our room
+        playerinroom = []
+        for id in self.allplayer:
+            if self.allplayer[id].room == self.player.room:
+                playerinroom.append(self.allplayer[id])
+        playerinroom.sort(key=lambda x: x.id)
+
+        # set card and shuffle to others
+        card = [Main.card[i-1] for i in range(1, 53)]
+        random.shuffle(card)
+        for index in range(len(playerinroom)):
+            playerinroom[index].card = sorted(card[index*13:index*13+13])
+            if playerinroom[index].id == self.player.id:
+                self.player = playerinroom[index]
+
+        # game loop
+        run = True
+        # placebutton = PlaceButton(self.win, (732, 819, 72, 15))
+        placebutton = PlaceButton(self.win, (632, 819, 72, 15))
+        passbutton = PassButton(self.win, (804, 819, 72, 15))
+        table = Table()
+
+        self.thread = Thread(target=getDataFromServerGame1, args=(
+            self.network, self.player, self.gamestart, table, self.tempdata))
+
+        resettable = False
+        while run:
+            # set bg as black
+            self.win.fill((0, 0, 0))
+            # set FPS to 60
+            self.clock.tick(60)
+            if not self.thread.is_alive():
+                # set data from server
+                setDataFromServerGame1(self.tempdata, self.allplayer, table)
+                turn = self.tempdata["turn"]
+                # start thread
+                if resettable:
+                    table.val = 0
+                    table.value = 0
+                    table.cardtype = ""
+                    table.lassplayerid = 0
+                    table.cardcount += 1
+                    table.keepcard = []
+                    table.movecordinate = []
+                    table.whopass = []
+                self.thread = Thread(target=getDataFromServerGame1, args=(
+                    self.network, self.player, self.gamestart, table, self.tempdata))
+                self.thread.start()
+                # reset turn complete
+                self.player.iscompleteturn = False
+                resettable = False
+
+            # handle all events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        pygame.quit()
+                        self.network.disconnect()
+                        break
+                # handle click on card
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        # get mouse position if click on card
+                        if event.pos[0] >= 492 and event.pos[0] <= 492+40*len(self.player.card) and event.pos[1] >= 744 and event.pos[1] <= 804:
+                            # get new card index
+                            newactive, val = int((event.pos[0]-492)//40), 0
+                            nowactive = []
+                            # get now active card index and it values
+                            for card in self.player.card:
+                                if card.active == 1:
+                                    nowactive.append(card)
+                                    val = card.val
+                            # check if click on not same value of activae card cancel active all card else continue
+                            if self.player.card[newactive].val != val:
+                                for card in nowactive:
+                                    card.click()
+                                self.player.card[newactive].click()
+                            else:
+                                self.player.card[newactive].click()
+                placebutton.get_event(event)
+                passbutton.get_event(event)
+
+            if turn != -1 and self.player.id == turn.id:
+                if table.lassplayerid == self.player.id and len(table.whopass) == 3:
+                    resettable = True
+                # me pass or out of hand
+                if self.player.id in table.whopass or len(self.player.card) == 0:
+                    if self.player.id not in table.whopass:
+                        table.whopass.append(self.player.id)
+                    self.player.iscompleteturn = True
+                    table.cardcount += 1
+
+                # check if player press button in his turn
+                if placebutton.ispress and self.player.id not in table.whopass:
+                    cardcount = table.cardcount
+                    table.place(self.player.card, self.player.id)
+                    self.player.iscompleteturn = table.cardcount - cardcount
+
+                # check if player press button in his turn
+                if passbutton.ispress:
+                    if self.player.id not in table.whopass:
+                        table.whopass.append(self.player.id)
+                    table.cardcount += 1
+                    self.player.iscompleteturn = True
+
+            placebutton.ispress = False
+            passbutton.ispress = False
+
+            if not self.thread.is_alive():
+                # set data from server
+                setDataFromServerGame1(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
                 if resettable:
                     table.val = 0
