@@ -177,7 +177,6 @@ class Main():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
-                print(table.whopass)
                 # start thread
                 if resettable:
                     table.val = 0
@@ -258,7 +257,6 @@ class Main():
                 # set data from server
                 setDataFromServerGame(self.tempdata, self.allplayer, table)
                 turn = self.tempdata["turn"]
-                print(table.whopass)
                 if resettable:
                     table.val = 0
                     table.value = 0
