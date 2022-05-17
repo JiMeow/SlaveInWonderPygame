@@ -28,6 +28,7 @@ playerdata = {}
 roomstate = {}
 # key: room, value: class Table
 table = {}
+direction = {}
 # key: room, value: class player
 turn = {}
 
@@ -53,34 +54,48 @@ def threaded_client(conn, id):
             # keep player data from client in server
             playerdata[id] = data["player"]
             # set default value of dict
-            if playerdata[id].room not in roomstate:
-                seed[playerdata[id].room] = random.randint(0, 100000)
-                roomstate[playerdata[id].room] = False
-                table[playerdata[id].room] = Table()
+            room = playerdata[id].room
+
+            if room not in roomstate:
+                seed[room] = random.randint(0, 100000)
+                roomstate[room] = False
+                table[room] = Table()
+                direction[room] = 1
             # set default value of playerinroom
-            if playerdata[id].room not in playerinroom:
-                playerinroom[playerdata[id].room] = [playerdata[id]]
+            if room not in playerinroom:
+                playerinroom[room] = [playerdata[id]]
             else:
                 # assign new player value in same player id
                 found = False
-                for index in range(len(playerinroom[playerdata[id].room])):
-                    if playerinroom[playerdata[id].room][index].id == playerdata[id].id:
+                for index in range(len(playerinroom[room])):
+                    if playerinroom[room][index].id == playerdata[id].id:
                         found = True
-                        playerinroom[playerdata[id].room][index] = playerdata[id]
+                        playerinroom[room][index] = playerdata[id]
                         break
                 if not found:
-                    playerinroom[playerdata[id].room].append(playerdata[id])
+                    playerinroom[room].append(playerdata[id])
 
             # update game state
-            roomstate[playerdata[id].room] = max(
-                roomstate[playerdata[id].room], data["gamestart"])
+            roomstate[room] = max(
+                roomstate[room], data["gamestart"])
 
             # if game start
             if "table" in data:
-                room = playerdata[id].room
                 # update table if table from client is newer than server by check cardcount
                 if data["table"].cardcount > table[room].cardcount:
                     table[room] = data["table"]
+
+                if len(playerdata[id].card) == 0:
+                    if room not in winner:
+                        winner[room] = []
+                    if playerdata[id] not in winner[room]:
+                        if len(data["table"].whopass) == 3:
+                            direction[room] *= -1
+                        winner[room].append(playerdata[id])
+                    for player in winner[room]:
+                        print(player.name, end=' ')
+                    print()
+
                     # print(data["table"].cardcount,
                     #       table[room].whopass)
                 # set default value of turn
@@ -101,15 +116,9 @@ def threaded_client(conn, id):
                         for index in range(len(playerinroom[room])):
                             if playerinroom[room][index].name == turn[room].name:
                                 turn[room] = playerinroom[room][(
-                                    index+1) % 4]
+                                    index+direction[room]) % 4]
                                 playerdata[id].iscompleteturn = False
                                 break
-                if len(playerdata[id].card) == 0:
-                    if room not in winner:
-                        winner[room] = []
-                    if playerdata[id] not in winner[room]:
-                        winner[room].append(playerdata[id])
-                    print(winner[room])
             if not data:
                 print("Disconnected")
                 break
