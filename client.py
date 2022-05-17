@@ -237,6 +237,8 @@ class Main():
                     resettable = True
                 # me pass or out of hand
                 if self.player.id in table.whopass or len(self.player.card) == 0:
+                    if self.player.id not in table.whopass:
+                        table.whopass.append(self.player.id)
                     self.player.iscompleteturn = True
                     table.cardcount += 1
 
