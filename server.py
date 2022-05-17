@@ -92,12 +92,10 @@ def threaded_client(conn, id):
                         if len(data["table"].whopass) == 3:
                             direction[room] *= -1
                         winner[room].append(playerdata[id])
-                    for player in winner[room]:
-                        print(player.name, end=' ')
-                    print()
-
-                    # print(data["table"].cardcount,
-                    #       table[room].whopass)
+                    # for player in winner[room]:
+                    #     print(player.name, end=' ')
+                    # print()
+                    
                 # set default value of turn
                 if room not in turn:
                     turn[room] = -1
