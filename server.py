@@ -1,10 +1,6 @@
 from threading import *
 import socket
-import json
-import time
 import pickle
-import pygame
-import hashlib
 import random
 
 from table import Table

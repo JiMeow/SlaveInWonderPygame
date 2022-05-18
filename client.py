@@ -128,7 +128,7 @@ class Main():
             self.gamestart = max(self.gamestart, self.layout.gamestart)
             if self.gamestart == 1:
                 print("Game start")
-                self.gamephase2()
+                self.gamephase1()
             pygame.display.update()
 
         pygame.quit()
@@ -171,7 +171,7 @@ class Main():
         resettable = False
         while run:
             # set bg as black
-            self.win.fill((0, 0, 0))
+            self.win.fill((100, 100, 100))
             # set FPS to 60
             self.clock.tick(60)
             if not self.thread.is_alive():
