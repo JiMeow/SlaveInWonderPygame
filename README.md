@@ -7,5 +7,5 @@ Have lobby feature, and normal slave card game.
 
 I will remake it somehow.
 
-Hope you enjoy :).
+Hope you enjoy :)
 
