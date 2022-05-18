@@ -66,7 +66,9 @@ def getDataFromServerGame1(network, player, gamestart, table, data):
         "player": player,
         "gamestart": gamestart,
         "table": table,
+        "gamestate": "phrase1",
     })
+
     resetDictdata(data)
     data["allplayer"] = newdata["allplayer"]
     data["gamestart"] = newdata["gamestart"]
@@ -102,7 +104,9 @@ def getDataFromServerGame2(network, player, gamestart, table, data):
         "player": player,
         "gamestart": gamestart,
         "table": table,
+        "gamestate": "phrase2",
     })
+
     resetDictdata(data)
     data["allplayer"] = newdata["allplayer"]
     data["gamestart"] = newdata["gamestart"]
