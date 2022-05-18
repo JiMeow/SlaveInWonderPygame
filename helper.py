@@ -90,7 +90,7 @@ def setDataFromServerGame1(data, allplayer, table):
     setClassTable(table, data["table"])
 
 
-def getDataFromServerGame2(network, player, gamestart, table, data):
+def getDataFromServerGame2(network, player, gamestart, table, winner, data):
     """
     It sends a request to the server, and then it receives a response from the server
 
@@ -105,6 +105,7 @@ def getDataFromServerGame2(network, player, gamestart, table, data):
         "gamestart": gamestart,
         "table": table,
         "gamestate": "phrase2",
+        "winner": winner
     })
 
     resetDictdata(data)

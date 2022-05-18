@@ -46,6 +46,21 @@ class PlaceButton(Button):
             center=(self.rect.centerx, self.rect.centery)))
 
 
+class SwitchButton(Button):
+
+    def __init__(self, win, rect):
+        super().__init__(win, rect)
+        self.apper = True
+
+    def draw(self):
+        if self.apper:
+            pygame.draw.rect(self.win, (255, 255, 255), self.rect)
+            textplay = pygame.font.Font(None, int(20)).render(
+                "Swap card", True, "black")
+            self.win.blit(textplay, textplay.get_rect(
+                center=(self.rect.centerx, self.rect.centery)))
+
+
 # It's a button that says "Pass" on it (in game state).
 class PassButton(Button):
 
