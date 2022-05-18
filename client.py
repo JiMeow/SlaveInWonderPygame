@@ -405,7 +405,6 @@ class Main():
                 switchbutton.get_event(event)
 
             if winner[0] != -1 and len(winner) > 2:
-                # print("go!!")
                 turn = winner[0]
 
             if turn != -1 and self.player.id == turn.id:
