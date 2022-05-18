@@ -298,6 +298,25 @@ class Main():
 
     def gamephase2(self):
         print("gamephase2 beta")
+        run = True
+        while run:
+            self.win.fill((255, 255, 255))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        pygame.quit()
+                        self.network.disconnect()
+                        break
+            textbeta = pygame.font.Font(None, int(100)).render(
+                f"gamephase2 beta", True, "black")
+            self.win.blit(textbeta, textbeta.get_rect(center=(768, 432)))
+            pygame.display.update()
         # self.tempdata = {
         #     "allplayer": dict(self.allplayer),
         #     "table": Table(),
