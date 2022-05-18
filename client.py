@@ -161,8 +161,8 @@ class Main():
         # game loop
         run = True
         # placebutton = PlaceButton(self.win, (732, 819, 72, 15))
-        placebutton = PlaceButton(self.win, (632, 819, 72, 15))
-        passbutton = PassButton(self.win, (804, 819, 72, 15))
+        placebutton = PlaceButton(self.win, (804, 819, 72, 15))
+        passbutton = PassButton(self.win, (632, 819, 72, 15))
         table = Table()
 
         self.thread = Thread(target=getDataFromServerGame1, args=(
