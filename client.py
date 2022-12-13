@@ -32,10 +32,10 @@ class Main():
     def __init__(self):
 
         # accept player name and room id from user
-        # name = input("Enter your name: ")
-        # room = input("Enter room id: ")
-        name = f"test{random.randint(0, 100)}"
-        room = "1"
+        name = input("Enter your name: ")
+        room = input("Enter room id: ")
+        # name = f"test{random.randint(0, 100)}"
+        # room = "1"
         # init network
         self.network = Network()
         # init pygame

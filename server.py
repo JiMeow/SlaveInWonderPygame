@@ -5,9 +5,7 @@ import random
 
 from table import Table
 from player import Player
-
-server = "25.34.159.172"
-port = 5555
+from setting import *
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((server, port))
