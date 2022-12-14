@@ -171,8 +171,4 @@ def countPlayerinRoom(allplayer, room):
     :param room: the room you want to count the players in
     :return: The number of players in a room.
     """
-    ans = 0
-    for id, player in allplayer.items():
-        if player.room == room:
-            ans += 1
-    return ans
+    return sum(player.room == room for id, player in allplayer.items())

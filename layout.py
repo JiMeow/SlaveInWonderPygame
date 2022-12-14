@@ -11,11 +11,7 @@ def countPlayerinRoom(allplayer, room):
     :param room: the room you want to count the players in
     :return: The number of players in a room.
     """
-    ans = 0
-    for id, player in allplayer.items():
-        if player.room == room:
-            ans += 1
-    return ans
+    return sum(player.room == room for id, player in allplayer.items())
 
 
 class Layout:
@@ -44,24 +40,18 @@ class Layout:
         It draws the game
         """
         myroom = self.player.room
-        allplayer = list(self.allplayer.items())
-        allplayer.sort()
-        playertodraw = []
-        for id, player in allplayer:
-            if player.room == myroom:
-                playertodraw.append(player)
+        allplayer = sorted(self.allplayer.items())
+        playertodraw = [player for id, player in allplayer if player.room == myroom]
         while playertodraw[0].id != self.player.id:
             playertodraw.append(playertodraw.pop(0))
-        index = 0
-        for player in playertodraw:
+        for index, player in enumerate(playertodraw):
 
             if index == 0:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (428, 764, 20, 20))
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(428, 794)))
 
@@ -69,70 +59,69 @@ class Layout:
                 for i in range(len(player.card)):
                     player.card[i].draw(self.win, 498+i*40, 744)
 
-            if index == 1:
+            elif index == 1:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (60, 412, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(60, 442)))
 
                 player.draw(self.win, 100, 412)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(110, 402)))
 
-            if index == 2:
+            elif index == 2:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (718, 100, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(718, 130)))
 
                 player.draw(self.win, 758, 100)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(768, 90)))
 
-            if index == 3:
+            elif index == 3:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (1386, 412, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(1386, 442)))
 
                 player.draw(self.win, 1426, 412)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(1436, 402)))
 
-            index += 1
-
-        textroom = pygame.font.Font(None, int(30)).render(
-            f"room id: {myroom}", True, "white")
+        textroom = pygame.font.Font(None, 30).render(
+            f"room id: {myroom}", True, "white"
+        )
         self.win.blit(textroom, (10, 10))
 
-        textstart = pygame.font.Font(None, int(30)).render(
-            "Start game", True, "white")
+        textstart = pygame.font.Font(None, 30).render("Start game", True, "white")
         self.win.blit(textstart, (10, 50))
 
         if self.playertoplay != -1:
-            textturn = pygame.font.Font(None, int(30)).render(
-                f"Turn: {self.playertoplay.name}", True, "white")
+            textturn = pygame.font.Font(None, 30).render(
+                f"Turn: {self.playertoplay.name}", True, "white"
+            )
             self.win.blit(textturn, (10, 90))
 
         self.placebutton.draw()
@@ -145,23 +134,17 @@ class Layout:
         It draws the game
         """
         myroom = self.player.room
-        allplayer = list(self.allplayer.items())
-        allplayer.sort()
-        playertodraw = []
-        for id, player in allplayer:
-            if player.room == myroom:
-                playertodraw.append(player)
+        allplayer = sorted(self.allplayer.items())
+        playertodraw = [player for id, player in allplayer if player.room == myroom]
         while playertodraw[0].id != self.player.id:
             playertodraw.append(playertodraw.pop(0))
-        index = 0
-        for player in playertodraw:
+        for index, player in enumerate(playertodraw):
             if index == 0:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (428, 764, 20, 20))
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(428, 794)))
 
@@ -169,70 +152,69 @@ class Layout:
                 for i in range(len(player.card)):
                     player.card[i].draw(self.win, 498+i*40, 744)
 
-            if index == 1:
+            elif index == 1:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (60, 412, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(60, 442)))
 
                 player.draw(self.win, 100, 412)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(110, 402)))
 
-            if index == 2:
+            elif index == 2:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (718, 100, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(718, 130)))
 
                 player.draw(self.win, 758, 100)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(768, 90)))
 
-            if index == 3:
+            elif index == 3:
                 if self.playertoplay != -1 and player.id == self.playertoplay.id:
                     pygame.draw.rect(self.win, (238, 0, 0),
                                      (1386, 412, 20, 20))
 
                 if player.id in self.table.whopass:
-                    textpass = pygame.font.Font(None, int(20)).render(
-                        f"pass", True, "white")
+                    textpass = pygame.font.Font(None, 20).render("pass", True, "white")
                     self.win.blit(textpass, textpass.get_rect(
                         center=(1386, 442)))
 
                 player.draw(self.win, 1426, 412)
-                textnumberofcard = pygame.font.Font(None, int(15)).render(
-                    f"{len(player.card)}", True, "white")
+                textnumberofcard = pygame.font.Font(None, 15).render(
+                    f"{len(player.card)}", True, "white"
+                )
                 self.win.blit(textnumberofcard, textnumberofcard.get_rect(
                     center=(1436, 402)))
 
-            index += 1
-
-        textroom = pygame.font.Font(None, int(30)).render(
-            f"room id: {myroom}", True, "white")
+        textroom = pygame.font.Font(None, 30).render(
+            f"room id: {myroom}", True, "white"
+        )
         self.win.blit(textroom, (10, 10))
 
-        textstart = pygame.font.Font(None, int(30)).render(
-            "Start game", True, "white")
+        textstart = pygame.font.Font(None, 30).render("Start game", True, "white")
         self.win.blit(textstart, (10, 50))
 
         if self.playertoplay != -1:
-            textturn = pygame.font.Font(None, int(30)).render(
-                f"Turn: {self.playertoplay.name}", True, "white")
+            textturn = pygame.font.Font(None, 30).render(
+                f"Turn: {self.playertoplay.name}", True, "white"
+            )
             self.win.blit(textturn, (10, 90))
 
         self.placebutton.draw()
@@ -246,37 +228,28 @@ class Layout:
         It draws the lobby
         """
         myroom = self.player.room
-        allplayer = list(self.allplayer.items())
-        allplayer.sort()
-        playertodraw = []
-        for id, player in allplayer:
-            if player.room == myroom:
-                playertodraw.append(player)
+        allplayer = sorted(self.allplayer.items())
+        playertodraw = [player for id, player in allplayer if player.room == myroom]
         while playertodraw[0].id != self.player.id:
             playertodraw.append(playertodraw.pop(0))
-        index = 0
-        for player in playertodraw:
+        for index, player in enumerate(playertodraw):
             if index == 0:
                 player.draw(self.win, 758, 744)
-            if index == 1:
+            elif index == 1:
                 player.draw(self.win, 100, 412)
-            if index == 2:
+            elif index == 2:
                 player.draw(self.win, 758, 100)
-            if index == 3:
+            elif index == 3:
                 player.draw(self.win, 1426, 412)
-            index += 1
-
-        textroom = pygame.font.Font(None, int(30)).render(
-            f"room id: {myroom}", True, "white")
+        textroom = pygame.font.Font(None, 30).render(
+            f"room id: {myroom}", True, "white"
+        )
         self.win.blit(textroom, (10, 10))
         self.playbutton.draw()
 
         if self.playbutton.ispress > 0 and countPlayerinRoom(self.allplayer, self.player.room) == 4:
-            self.playbutton.ispress = 0
             self.gamestart = 1
-        else:
-            self.playbutton.ispress = 0
-
+        self.playbutton.ispress = 0
         pygame.display.update()
 
     def updateAllplayer(self, allplayer):

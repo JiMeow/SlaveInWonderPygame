@@ -95,21 +95,22 @@ def threaded_client(conn, id):
                 # find club-3 card to set first player
                 if turn[room] == -1:
                     for index in range(len(playerinroom[room])):
-                        if len(playerinroom[room][index].card) > 0:
-                            if playerinroom[room][index].card[0].name == "club-3.png":
-                                turn[room] = playerdata[id]
-                                break
-                else:
-                    # set another player to turn
-                    if turn[room].id == playerdata[id].id and playerdata[id].iscompleteturn:
-                        print(playerdata[id].name,
-                              playerdata[id].iscompleteturn)
-                        for index in range(len(playerinroom[room])):
-                            if playerinroom[room][index].name == turn[room].name:
-                                turn[room] = playerinroom[room][(
-                                    index+direction[room]) % 4]
-                                playerdata[id].iscompleteturn = False
-                                break
+                        if (
+                            len(playerinroom[room][index].card) > 0
+                            and playerinroom[room][index].card[0].name
+                            == "club-3.png"
+                        ):
+                            turn[room] = playerdata[id]
+                            break
+                elif turn[room].id == playerdata[id].id and playerdata[id].iscompleteturn:
+                    print(playerdata[id].name,
+                          playerdata[id].iscompleteturn)
+                    for index in range(len(playerinroom[room])):
+                        if playerinroom[room][index].name == turn[room].name:
+                            turn[room] = playerinroom[room][(
+                                index+direction[room]) % 4]
+                            playerdata[id].iscompleteturn = False
+                            break
 
             if data["gamestate"] == "phrase2":
                 # update table if table from client is newer than server by check cardcount
@@ -130,15 +131,13 @@ def threaded_client(conn, id):
                 # find club-3 card to set first player
                 if turn[room] == -1:
                     turn[room] = winner[room][-1]
-                else:
-                    # set another player to turn
-                    if turn[room].id == playerdata[id].id and playerdata[id].iscompleteturn:
-                        for index in range(len(playerinroom[room])):
-                            if playerinroom[room][index].name == turn[room].name:
-                                turn[room] = playerinroom[room][(
-                                    index+direction[room]) % 4]
-                                playerdata[id].iscompleteturn = False
-                                break
+                elif turn[room].id == playerdata[id].id and playerdata[id].iscompleteturn:
+                    for index in range(len(playerinroom[room])):
+                        if playerinroom[room][index].name == turn[room].name:
+                            turn[room] = playerinroom[room][(
+                                index+direction[room]) % 4]
+                            playerdata[id].iscompleteturn = False
+                            break
 
         if not data:
             print("Disconnected")
@@ -171,9 +170,9 @@ def threaded_client(conn, id):
                     "seed": seed[room],
                 }
         conn.sendall(pickle.dumps(reply))
-        # except Exception as e:
-        #     print(e)
-        #     break
+            # except Exception as e:
+            #     print(e)
+            #     break
     print(id, "disconnected")
     playerdata.pop(id)
     currentPlayer[id] = 0

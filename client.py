@@ -98,12 +98,11 @@ class Main():
                     pygame.quit()
                     self.network.disconnect()
                     break
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-                        pygame.quit()
-                        self.network.disconnect()
-                        break
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
                 if self.gamestart == 0:
                     # check if click play button
                     playbutton.get_event(event)
@@ -144,10 +143,11 @@ class Main():
         random.seed(self.seed)
 
         # set player in our room
-        playerinroom = []
-        for id in self.allplayer:
-            if self.allplayer[id].room == self.player.room:
-                playerinroom.append(self.allplayer[id])
+        playerinroom = [
+            self.allplayer[id]
+            for id in self.allplayer
+            if self.allplayer[id].room == self.player.room
+        ]
         playerinroom.sort(key=lambda x: x.id)
 
         # set card and shuffle to others
@@ -202,35 +202,36 @@ class Main():
                     pygame.quit()
                     self.network.disconnect()
                     break
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-                        pygame.quit()
-                        self.network.disconnect()
-                        break
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
                 # handle click on card
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        # get mouse position if click on card
-                        if event.pos[0] >= 492 and event.pos[0] <= 492+40*len(self.player.card) and event.pos[1] >= 744 and event.pos[1] <= 804:
-                            # get new card index
-                            newactive, val = int((event.pos[0]-492)//40), 0
-                            nowactive = []
-                            # get now active card index and it values
-                            for card in self.player.card:
-                                if card.active == 1:
-                                    nowactive.append(card)
-                                    val = card.val
+                if (
+                    event.type == pygame.MOUSEBUTTONDOWN
+                    and event.button == 1
+                    and event.pos[0] >= 492
+                    and event.pos[0] <= 492 + 40 * len(self.player.card)
+                    and event.pos[1] >= 744
+                    and event.pos[1] <= 804
+                ):
+                    # get new card index
+                    newactive, val = int((event.pos[0]-492)//40), 0
+                    nowactive = []
+                    # get now active card index and it values
+                    for card in self.player.card:
+                        if card.active == 1:
+                            nowactive.append(card)
+                            val = card.val
                             # check if click on not same value of activae card cancel active all card else continue
-                            try:
-                                if self.player.card[newactive].val != val:
-                                    for card in nowactive:
-                                        card.click()
-                                    self.player.card[newactive].click()
-                                else:
-                                    self.player.card[newactive].click()
-                            except:
-                                pass
+                    try:
+                        if self.player.card[newactive].val != val:
+                            for card in nowactive:
+                                card.click()
+                        self.player.card[newactive].click()
+                    except:
+                        pass
 
                 placebutton.get_event(event)
                 passbutton.get_event(event)

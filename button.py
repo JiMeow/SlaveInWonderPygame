@@ -26,8 +26,7 @@ class PlayButton(Button):
 
     def draw(self):
         pygame.draw.rect(self.win, (255, 255, 255), self.rect)
-        textplay = pygame.font.Font(None, int(20)).render(
-            "Play game", True, "black")
+        textplay = pygame.font.Font(None, 20).render("Play game", True, "black")
         self.win.blit(textplay, textplay.get_rect(
             center=(self.rect.centerx, self.rect.centery)))
 
@@ -40,8 +39,7 @@ class PlaceButton(Button):
 
     def draw(self):
         pygame.draw.rect(self.win, (255, 255, 255), self.rect)
-        textplay = pygame.font.Font(None, int(20)).render(
-            "Place card", True, "black")
+        textplay = pygame.font.Font(None, 20).render("Place card", True, "black")
         self.win.blit(textplay, textplay.get_rect(
             center=(self.rect.centerx, self.rect.centery)))
 
@@ -55,8 +53,7 @@ class SwitchButton(Button):
     def draw(self):
         if self.apper:
             pygame.draw.rect(self.win, (255, 255, 255), self.rect)
-            textplay = pygame.font.Font(None, int(20)).render(
-                "Swap card", True, "black")
+            textplay = pygame.font.Font(None, 20).render("Swap card", True, "black")
             self.win.blit(textplay, textplay.get_rect(
                 center=(self.rect.centerx, self.rect.centery)))
 
@@ -69,7 +66,6 @@ class PassButton(Button):
 
     def draw(self):
         pygame.draw.rect(self.win, (255, 255, 255), self.rect)
-        textplay = pygame.font.Font(None, int(20)).render(
-            "Pass", True, "black")
+        textplay = pygame.font.Font(None, 20).render("Pass", True, "black")
         self.win.blit(textplay, textplay.get_rect(
             center=(self.rect.centerx, self.rect.centery)))
