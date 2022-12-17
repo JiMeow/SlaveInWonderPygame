@@ -42,28 +42,24 @@ class Card():
 
     # set for sort
     def __lt__(self, obj):
-        if self.val < obj.val:
-            return True
-        elif self.val == obj.val:
+        if self.val == obj.val:
             return self.flowers < obj.flowers
+        return self.val < obj.val
 
     def __gt__(self, obj):
-        if self.val > obj.val:
-            return True
-        elif self.val == obj.val:
+        if self.val == obj.val:
             return self.flowers > obj.flowers
+        return self.val > obj.val
 
     def __le__(self, obj):
-        if self.val < obj.val:
-            return True
-        elif self.val == obj.val:
+        if self.val == obj.val:
             return self.flowers <= obj.flowers
+        return self.val < obj.val
 
     def __ge__(self, obj):
-        if self.val > obj.val:
-            return True
-        elif self.val == obj.val:
+        if self.val == obj.val:
             return self.flowers >= obj.flowers
+        return self.val > obj.val
 
     def __eq__(self, obj):
         return self.val == obj.val and self.flowers == obj.flowers
