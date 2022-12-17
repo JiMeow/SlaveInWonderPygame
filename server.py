@@ -13,7 +13,7 @@ s.listen(20)
 print("Waiting for a connection, Server Started")
 
 currentPlayer = {}
-maxPlayers = 50
+MAXPLAYERS = 50
 
 # key: id, value: class player
 playerdata = {}
@@ -170,9 +170,9 @@ def threaded_client(conn, id):
                     "seed": seed[room],
                 }
         conn.sendall(pickle.dumps(reply))
-            # except Exception as e:
-            #     print(e)
-            #     break
+        # except Exception as e:
+        #     print(e)
+        #     break
     print(id, "disconnected")
     playerdata.pop(id)
     currentPlayer[id] = 0
@@ -180,12 +180,12 @@ def threaded_client(conn, id):
 
 
 def main():
-    for i in range(1, maxPlayers+1):
+    for i in range(1, MAXPLAYERS+1):
         currentPlayer[i] = 0
     idx = 0
     while True:
-        conn, addr = s.accept()
-        for i in range(1, maxPlayers+1):
+        conn, _ = s.accept()
+        for i in range(1, MAXPLAYERS+1):
             if currentPlayer[i] == 0:
                 currentPlayer[i] = 1
                 idx = i
