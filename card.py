@@ -13,7 +13,7 @@ class Card():
         self.flowers, val = name[:-4].split("-")
         val_lst = ['T', 'J', 'Q', 'K', '1', '2']
 
-        self.val = 10 + val_lst.index(val) if self.val in val_lst else int(val)
+        self.val = 10 + val_lst.index(val) if val in val_lst else int(val)
         self.active = False
         self.value = self.val+ord(self.flowers[0])/1000
 
