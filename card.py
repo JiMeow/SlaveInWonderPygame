@@ -56,39 +56,25 @@ class Card():
         if self.val < obj.val:
             return True
         elif self.val == obj.val:
-            if self.flowers < obj.flowers:
-                return True
-            else:
-                return False
+            return self.flowers < obj.flowers
 
     def __gt__(self, obj):
         if self.val > obj.val:
             return True
         elif self.val == obj.val:
-            if self.flowers > obj.flowers:
-                return True
-            else:
-                return False
+            return self.flowers > obj.flowers
 
     def __le__(self, obj):
         if self.val < obj.val:
             return True
         elif self.val == obj.val:
-            if self.flowers <= obj.flowers:
-                return True
-            else:
-                return False
+            return self.flowers <= obj.flowers
 
     def __ge__(self, obj):
         if self.val > obj.val:
             return True
         elif self.val == obj.val:
-            if self.flowers >= obj.flowers:
-                return True
-            else:
-                return False
+            return self.flowers >= obj.flowers
 
     def __eq__(self, obj):
-        if self.val == obj.val and self.flowers == obj.flowers:
-            return True
-        return False
+        return self.val == obj.val and self.flowers == obj.flowers

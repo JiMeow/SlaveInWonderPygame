@@ -28,7 +28,6 @@ class Player:
         :param y: the y coordinate of the top left corner of the rectangle
         """
         pygame.draw.rect(screen, self.color, (x, y, self.width, self.high))
-        textname = pygame.font.Font(None, int(20)).render(
-            f"{self.name}", True, "white")
+        textname = pygame.font.Font(None, 20).render(f"{self.name}", True, "white")
         screen.blit(textname, textname.get_rect(
             center=(x+self.width//2, y+self.high*3//2)))
