@@ -1,7 +1,6 @@
 from threading import *
 import pygame
 import random
-import time
 
 from button import PassButton, PlayButton, PlaceButton, SwitchButton
 from network import Network
@@ -18,12 +17,12 @@ from helper import *
 
 
 class Main():
-    cardname = [
-        'club-1.png', 'club-2.png', 'club-3.png', 'club-4.png', 'club-5.png', 'club-6.png', 'club-7.png', 'club-8.png', 'club-9.png', 'club-T.png',  'club-J.png', 'club-Q.png', 'club-K.png',
-        'diamond-1.png', 'diamond-2.png', 'diamond-3.png', 'diamond-4.png', 'diamond-5.png', 'diamond-6.png', 'diamond-7.png', 'diamond-8.png', 'diamond-9.png', 'diamond-T.png', 'diamond-J.png', 'diamond-Q.png', 'diamond-K.png',
-        'heart-1.png', 'heart-2.png', 'heart-3.png', 'heart-4.png', 'heart-5.png', 'heart-6.png', 'heart-7.png', 'heart-8.png', 'heart-9.png', 'heart-T.png', 'heart-J.png', 'heart-Q.png', 'heart-K.png',
-        'spade-1.png', 'spade-2.png', 'spade-3.png', 'spade-4.png', 'spade-5.png', 'spade-6.png', 'spade-7.png', 'spade-8.png', 'spade-9.png', 'spade-T.png', 'spade-J.png', 'spade-Q.png', 'spade-K.png'
-    ]
+    suit_lst = ['club', 'diamond', 'heart', 'spade']
+    val_lst = list(map(str, range(1, 10))) + ['T', 'J', 'Q', 'K']
+    cardname = []
+    for suit in suit_lst:
+        for val in val_lst:
+            cardname.append(f'{suit}-{val}.png')
 
     card = []
     for name in cardname:
@@ -98,12 +97,11 @@ class Main():
                     pygame.quit()
                     self.network.disconnect()
                     break
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-                        pygame.quit()
-                        self.network.disconnect()
-                        break
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
                 if self.gamestart == 0:
                     # check if click play button
                     playbutton.get_event(event)
@@ -144,10 +142,11 @@ class Main():
         random.seed(self.seed)
 
         # set player in our room
-        playerinroom = []
-        for id in self.allplayer:
-            if self.allplayer[id].room == self.player.room:
-                playerinroom.append(self.allplayer[id])
+        playerinroom = [
+            self.allplayer[id]
+            for id in self.allplayer
+            if self.allplayer[id].room == self.player.room
+        ]
         playerinroom.sort(key=lambda x: x.id)
 
         # set card and shuffle to others
@@ -202,35 +201,36 @@ class Main():
                     pygame.quit()
                     self.network.disconnect()
                     break
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-                        pygame.quit()
-                        self.network.disconnect()
-                        break
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.run = False
+                    pygame.quit()
+                    self.network.disconnect()
+                    break
                 # handle click on card
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        # get mouse position if click on card
-                        if event.pos[0] >= 492 and event.pos[0] <= 492+40*len(self.player.card) and event.pos[1] >= 744 and event.pos[1] <= 804:
-                            # get new card index
-                            newactive, val = int((event.pos[0]-492)//40), 0
-                            nowactive = []
-                            # get now active card index and it values
-                            for card in self.player.card:
-                                if card.active == 1:
-                                    nowactive.append(card)
-                                    val = card.val
+                if (
+                    event.type == pygame.MOUSEBUTTONDOWN
+                    and event.button == 1
+                    and event.pos[0] >= 492
+                    and event.pos[0] <= 492 + 40 * len(self.player.card)
+                    and event.pos[1] >= 744
+                    and event.pos[1] <= 804
+                ):
+                    # get new card index
+                    newactive, val = int((event.pos[0]-492)//40), 0
+                    nowactive = []
+                    # get now active card index and it values
+                    for card in self.player.card:
+                        if card.active == 1:
+                            nowactive.append(card)
+                            val = card.val
                             # check if click on not same value of activae card cancel active all card else continue
-                            try:
-                                if self.player.card[newactive].val != val:
-                                    for card in nowactive:
-                                        card.click()
-                                    self.player.card[newactive].click()
-                                else:
-                                    self.player.card[newactive].click()
-                            except:
-                                pass
+                    try:
+                        if self.player.card[newactive].val != val:
+                            for card in nowactive:
+                                card.click()
+                        self.player.card[newactive].click()
+                    except:
+                        pass
 
                 placebutton.get_event(event)
                 passbutton.get_event(event)

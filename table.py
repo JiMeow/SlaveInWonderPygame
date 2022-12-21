@@ -6,13 +6,13 @@ from card import Card
 
 
 class Table:
+    suit_lst = ['club', 'diamond', 'heart', 'spade']
+    val_lst = list(map(str, range(1, 10))) + ['T', 'J', 'Q', 'K']
+    cardname = []
+    for suit in suit_lst:
+        for val in val_lst:
+            cardname.append(f'{suit}-{val}.png')
 
-    cardname = [
-        'club-1.png', 'club-2.png', 'club-3.png', 'club-4.png', 'club-5.png', 'club-6.png', 'club-7.png', 'club-8.png', 'club-9.png', 'club-T.png',  'club-J.png', 'club-Q.png', 'club-K.png',
-        'diamond-1.png', 'diamond-2.png', 'diamond-3.png', 'diamond-4.png', 'diamond-5.png', 'diamond-6.png', 'diamond-7.png', 'diamond-8.png', 'diamond-9.png', 'diamond-T.png', 'diamond-J.png', 'diamond-Q.png', 'diamond-K.png',
-        'heart-1.png', 'heart-2.png', 'heart-3.png', 'heart-4.png', 'heart-5.png', 'heart-6.png', 'heart-7.png', 'heart-8.png', 'heart-9.png', 'heart-T.png', 'heart-J.png', 'heart-Q.png', 'heart-K.png',
-        'spade-1.png', 'spade-2.png', 'spade-3.png', 'spade-4.png', 'spade-5.png', 'spade-6.png', 'spade-7.png', 'spade-8.png', 'spade-9.png', 'spade-T.png', 'spade-J.png', 'spade-Q.png', 'spade-K.png'
-    ]
     card = []
     for name in cardname:
         card.append(Card(name))
@@ -37,10 +37,9 @@ class Table:
 
         :param screen: The screen that the cards will be draw on
         """
-        historyindex = 0
         self.keepcard = self.keepcard[-5:]
         self.movecordinate = self.movecordinate[-5:]
-        for listcard in self.keepcard:
+        for historyindex, listcard in enumerate(self.keepcard):
             rect = pygame.Rect((0, 0, 0, 0))
             rect.center = (
                 self.rect.center[0], self.rect.center[1])
@@ -60,7 +59,6 @@ class Table:
                 if len(listcard) == 4:
                     screen.blit(
                         img, (rect.x-45+index*30+self.movecordinate[historyindex][index][0], rect.y+self.movecordinate[historyindex][index][1], 40, 60))
-            historyindex += 1
 
     def place(self, listcard, playerid):
         """
@@ -70,10 +68,7 @@ class Table:
 
         :param listcard: list of cards
         """
-        activecard = []
-        for card in listcard:
-            if card.active:
-                activecard.append(card)
+        activecard = [card for card in listcard if card.active]
         if self.value == 0:
             self.setcardhere(activecard, playerid)
             for card in activecard:
@@ -126,7 +121,11 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(2)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(2)])
+                [
+                    (random.randint(-10, 10), random.randint(-10, 10))
+                    for _ in range(2)
+                ]
+            )
         if len(activecard) == 3:
             self.val = activecard[0].val
             self.value = activecard[-1].value*1000
@@ -137,7 +136,11 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(3)])
+                [
+                    (random.randint(-10, 10), random.randint(-10, 10))
+                    for _ in range(3)
+                ]
+            )
         if len(activecard) == 4:
             self.val = activecard[0].val
             self.value = activecard[-1].value*1000
@@ -148,7 +151,11 @@ class Table:
                 (f"photo/cardsprite/{activecard[i].name}", angletorotate) for i in range(3)]
             self.keepcard.append(data)
             self.movecordinate.append(
-                [(random.randint(-10, 10), random.randint(-10, 10)) for i in range(4)])
+                [
+                    (random.randint(-10, 10), random.randint(-10, 10))
+                    for _ in range(4)
+                ]
+            )
         self.cardtype = "odd" if len(activecard) % 2 == 1 else "even"
         self.lassplayerid = playerid
         self.cardcount += 1

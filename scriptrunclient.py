@@ -11,7 +11,7 @@ def run_client(script):
 p_count = int(sys.argv[1])
 script = "python client.py"
 all_p = []
-for i in range(p_count):
+for _ in range(p_count):
     p = Thread(target=run_client, args=(script,))
     all_p.append(p)
 for i in range(p_count):
